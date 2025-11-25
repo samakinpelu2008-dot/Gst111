@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>English Quiz App</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f2f2f2;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+    #app {
+        background: white;
+        width: 90%;
+        max-width: 650px;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #ccc;
+    }
+    .option {
+        padding: 12px;
+        margin: 8px 0;
+        border-radius: 5px;
+        background: #eee;
+        cursor: pointer;
+        border: 2px solid transparent;
+    }
+    .option.correct {
+        background: #c8ffcd;
+        border-color: #0a0;
+    }
+    .option.wrong {
+        background: #ffb9b9;
+        border-color: #a00;
+    }
+    .timer {
+        font-size: 20px;
+        font-weight: bold;
+        color: red;
+        text-align: right;
+    }
+</style>
+</head>
+<body>
+<div id="app">
+    <h2 id="question"></h2>
+    <div id="options"></div>
+    <p class="timer">Time left: <span id="timer">5</span>s</p>
+</div>
+
+<script>
+// =======================
+// 60 QUESTIONS ARRAY
+// =======================
+const questions = [
+{q:"As it was impossible to convey the corpse home, the body was ________ and the ashy remains were flown home for burial.",
+ o:["incriminated","preserved","embalmed","cremated"], a:3},
+
+{q:"Bursary awards were re-introduced _____________ due consideration.",
+ o:["in view of","because of","owing to","after"], a:3},
+
+{q:"Recent economic challenges strengthened John’s __________ to accept gateman’s job.",
+ o:["Resolve","decision","interest","opening"], a:1},
+
+{q:"The modal auxiliary 'can' in 'I can play football very well' expresses:",
+ o:["Ability","Willingness","Possibility","Obligation"], a:0},
+
+{q:"If a student reads 2000 words in 6 mins 40 secs, what is the WPM?",
+ o:["540WPM","600WPM","520WPM","480WPM"], a:null}, // manual answer
+// we treat correct as NONE because it's not in options
+
+{q:"Sentence which contains two independent clauses:",
+ o:["Simple","Compound","Complex","Compound complex"], a:1},
+
+{q:"'He does his work, I mine' is what type of paragraph?",
+ o:["Genitive","Ellipsis","Substitution","Conjunction"], a:1},
+
+{q:"How many verbs are in 'Singing regularly happens to be my hobby'?",
+ o:["3","2","4","5"], a:1},
+
+{q:"A more acceptable recall strategy in reading is:",
+ o:["Regression","Cramming","Vocalization","Paraphrasing"], a:3},
+
+{q:"Prepare what _________ will discuss at the forum.",
+ o:["you and them","you and they","them and you","them and I"], a:1},
+
+{q:"Many a woman _________ found true love.",
+ o:["has","having","have","haven’t"], a:0},
+
+{q:"Every day brings ________ own problem.",
+ o:["their","its","it's","theirs"], a:1},
+
+{q:"He, together with his lovers, ___________ been arrested.",
+ o:["has","have","is","was"], a:0},
+
+{q:"There could be a uniformity of age, but there is always _____ of talents among age-mates.",
+ o:["an anomaly","a distinction","an inequality","an abundant"], a:2},
+
+{q:"It is advisable to _____ any water that has been polluted.",
+ o:["clear","sanitize","sterilize","purify"], a:3},
+
+{q:"He was asked to carry out the investigation thoroughly but he did it _______.",
+ o:["hurriedly","impatiently","haphazardly","impartially"], a:2},
+
+{q:"The committee was given the mandate of determining the immediate and _____ causes of the students’ crisis.",
+ o:["delayed","obscure","remote","later"], a:2},
+
+{q:"Sentences are broadly classified into:",
+ o:["4","2","5","3"], a:3},
+
+{q:"There are _______ broad types of clause in English.",
+ o:["2","3","4","5"], a:3},
+
+{q:"In 'He behaves like a spirit', the word 'spirit' is a/an ______ noun.",
+ o:["Collective","Abstract","Proper","Genetive"], a:1},
+
+{q:"The verb 'read' in 'He reads seriously' is a/an ______ verb.",
+ o:["Abstract","Collective","Proper","Genetive"], a:0},
+
+{q:"In 'He gave her something to give them or us' there are ________ pronouns.",
+ o:["2","3","4","5"], a:3},
+
+{q:"The word 'Beautify' can be segmented as _______.",
+ o:["Beautify+o","Beauty+o","Beauty+fy","Be+autify"], a:2},
+
+{q:"Paragraphs are categorized into ________ major kinds.",
+ o:["2","3","4","5"], a:0},
+
+{q:"In 'Olu used the bag', the morpheme added in 'used' is:",
+ o:["-ed","-d","-us","-u"], a:1},
+
+{q:"Paragraph coherence entails the arrangement of __________ sentences.",
+ o:["Coherence","Meaningful","Logical","Sentential"], a:2},
+
+{q:"Percentage of noun elements in 'The students are in the class'?",
+ o:["24.2%","50%","66.6%","33.33%"], a:3},
+
+{q:"Words that help move smoothly from sentence to sentence:",
+ o:["Acronym devices","Important devices","Transitional devices","Parental devices"], a:2},
+
+{q:"My teacher and sister ________ advised me to be serious.",
+ o:["have","has","is","was"], a:1},
+
+{q:"Seven hours _________ spent already.",
+ o:["was been","is been","has been","have been"], a:2},
+
+{q:"Twenty kilometres __________ covered.",
+ o:["has been","have been","has being","have being"], a:0},
+
+{q:"I, your creator, _________ the one teaching you.",
+ o:["is","am","has been","have being"], a:1},
+
+{q:"More than one new hostel ______ built annually.",
+ o:["have been","has being","are","is"], a:3},
+
+{q:"The President made a nation-wide _________ on the removal of fuel subsidy.",
+ o:["broadcast","prophecy","polemics","decree"], a:0},
+
+{q:"The government set up a commission of inquiry _________ the award of contracts.",
+ o:["about","for","into","to"], a:1},
+
+{q:"Dr. Stone’s lecture has given me great _____________ into the problem.",
+ o:["glimpse","knowledge","insight","opening"], a:2},
+
+{q:"Mary and Janet are sisters; the former is a teacher and the ________ is a seamstress.",
+ o:["later","other","prior","latter"], a:3},
+
+{q:"The Manager wants ________ persons.",
+ o:["experimental","experienced","exposed","experienced"], a:1},
+
+{q:"The Holy Book _________ we should be honest.",
+ o:["said","says","had said","was saying"], a:1},
+
+{q:"Evidence before us ________ the case.",
+ o:["proves","prove","are proving","are proven"], a:0},
+
+{q:"Neither the leader nor his followers will lose_______ popularity.",
+ o:["his","their","the","our"], a:1},
+
+{q:"The workers as well as their boss ________ late often.",
+ o:["works","work","is working","does work late"], a:1},
+
+{q:"Four hours fifteen minutes _______ enough to write the test.",
+ o:["are","were","is","have been"], a:2},
+
+{q:"One of the law makers who _______ at the Senate was once a lecturer.",
+ o:["are","was","were","is"], a:3},
+
+{q:"Aeroplanes _______ strict monitoring.",
+ o:["requires","require","do requires","does require"], a:1},
+
+{q:"His routine _____ sweeping.",
+ o:["comprises","comprises of","consists","consist of"], a:2},
+
+{q:"How to effectively read books _________ not difficult.",
+ o:["are","has","is","have"], a:2},
+
+{q:"My nephew, Deji, has just earned his _________ degree.",
+ o:["masters","masters’","master’s","none"], a:1},
+
+{q:"There ______ many more services available for tourists to Nigeria.",
+ o:["have being","has been","is","are"], a:3},
+
+{q:"A popular choice ________ the Premier Hotel suites.",
+ o:["is","are","has being","are being"], a:0},
+
+{q:"Reading a novel sometimes ______ me happy.",
+ o:["makes","make","is making","have made"], a:0},
+
+{q:"Each of the author’s literary works _______ a similar plot.",
+ o:["are","is having","has","have"], a:2},
+
+{q:"Neither of the girls _______ well to school.",
+ o:["dresses","dressing","dress","do dress"], a:0},
+
+{q:"One of the global challenges _______ food shortage.",
+ o:["are being","is being","are","is"], a:3},
+
+{q:"Most research on tomatoes _____ from IITA.",
+ o:["are being","is being","are","is"], a:3},
+
+{q:"Different kinds of oranges _______ in different parts of the world.",
+ o:["thrive","thrives","thriving","none"], a:0},
+
+{q:"Most of these automobiles _______ good tyres.",
+ o:["has","have","has hand","does not have"], a:1},
+
+{q:"Each of the judges________ that the defendant is innocent.",
+ o:["agree","agrees","have agreed","have been agreed"], a:1},
+
+{q:"A less expensive alternative _______ studio apartment.",
+ o:["are","is","have been","has being"], a:1},
+
+{q:"Wickedness is inherent in man.",
+ o:["inherited","innate","injected","initiated"], a:1}
+];
+
+// =======================
+// QUIZ ENGINE
+// =======================
+let index = 0;
+let score = 0;
+let timer;
+let timeLeft = 5;
+
+function loadQuestion() {
+    if (index >= questions.length) return finishQuiz();
+
+    document.getElementById("timer").innerText = 5;
+    timeLeft = 5;
+
+    timer = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").innerText = timeLeft;
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            showCorrect(-1);
+            setTimeout(nextQuestion, 700);
+        }
+    }, 1000);
+
+    let q = questions[index];
+    document.getElementById("question").innerText = (index+1) + ". " + q.q;
+
+    let ops = "";
+    q.o.forEach((opt,i)=>{
+        ops += `<div class="option" onclick="selectOption(${i})">${opt}</div>`;
+    });
+
+    document.getElementById("options").innerHTML = ops;
+}
+
+function selectOption(i) {
+    clearInterval(timer);
+    showCorrect(i);
+    setTimeout(nextQuestion, 700);
+}
+
+function showCorrect(selected) {
+    let opts = document.querySelectorAll(".option");
+    let ans = questions[index].a;
+
+    opts.forEach((opt,idx)=>{
+        if (idx === ans) opt.classList.add("correct");
+        if (selected === idx && selected !== ans) opt.classList.add("wrong");
+    });
+
+    if (selected === ans) score++;
+}
+
+function nextQuestion(){
+    index++;
+    loadQuestion();
+}
+
+function finishQuiz(){
+    let percent = (score / questions.length) * 100;
+    let score30 = (score / questions.length) * 30;
+
+    document.getElementById("app").innerHTML = `
+        <h2>Quiz Completed!</h2>
+        <p><b>Score:</b> ${score} / ${questions.length}</p>
+        <p><b>Score over 30:</b> ${score30.toFixed(1)} / 30</p>
+        <p><b>Percentage:</b> ${percent.toFixed(1)}%</p>
+    `;
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
