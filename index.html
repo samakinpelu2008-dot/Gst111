@@ -3,288 +3,223 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GST111 Quiz App</title>
+<title>Messi vs Ronaldo GOATs Award</title>
 <style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: #f3f4f6;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .hide { display: none; }
-
-    #home, #quiz, #result {
-        width: 90%;
-        max-width: 650px;
-        margin-top: 50px;
-        text-align: center;
-    }
-
-    h1 { color: #333; }
-
-    .course-card {
-        background: linear-gradient(145deg, #4f6ef7, #1e3cc0);
-        color: white;
-        padding: 25px;
-        margin: 15px 0;
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        cursor: pointer;
-        font-size: 1.2em;
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .course-card:hover { 
-        transform: scale(1.05); 
-        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    }
-
-    #quiz-card {
-        background: white;
-        padding: 25px;
-        border-radius: 15px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        margin-bottom: 20px;
-    }
-
-    #question { font-size: 1.3em; margin-bottom: 20px; }
-
-    .option-btn {
-        display: block;
-        width: 100%;
-        padding: 15px;
-        margin: 10px 0;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        background: #007bff;
-        color: white;
-        font-size: 1em;
-        transition: 0.3s;
-    }
-
-    .option-btn:hover { background: #0056b3; }
-
-    .correct { background: #28a745 !important; color: white; }
-    .wrong { background: #dc3545 !important; color: white; }
-
-    #timer-bar {
-        height: 15px;
-        width: 100%;
-        background: #e0e0e0;
-        border-radius: 10px;
-        overflow: hidden;
-        margin-bottom: 15px;
-    }
-
-    #timer-fill {
-        height: 100%;
-        width: 100%;
-        background: #4f6ef7;
-        transition: width 1s linear;
-    }
-
-    #score-text { font-size: 1.4em; margin: 20px 0; }
-    button { padding: 12px 25px; font-size: 1em; cursor: pointer; margin-top: 20px; border: none; border-radius: 10px; background: #4f6ef7; color: white; transition: 0.3s;}
-    button:hover { background: #1e3cc0; }
-
+/* ====== CSS ====== */
+body { font-family: Arial, sans-serif; background:#f5f5f5; margin:0; padding:0; text-align:center; }
+h1 { margin-top:20px; font-size:32px; color:#222; }
+button { padding:12px 20px; border:none; border-radius:8px; background:#007bff; color:white; cursor:pointer; font-size:16px; margin-top:10px; }
+button:hover { background:#0056b3; }
+#container { display:flex; justify-content:center; flex-wrap:wrap; margin-top:30px; }
+.card { background:white; padding:20px; border-radius:15px; margin:15px; width:300px; box-shadow:0 0 10px rgba(0,0,0,0.2); }
+.player { width:200px; border-radius:10px; }
+.bar-container { background:#ddd; border-radius:20px; width:100%; height:20px; margin:10px 0; }
+.bar { height:20px; border-radius:20px; text-align:center; color:white; font-weight:bold; line-height:20px; }
+#countdown { font-size:22px; margin-top:20px; font-weight:bold; }
+#redirect-warning { color:red; font-weight:bold; margin-top:20px; display:none; }
+.comment-section { max-width:600px; margin:20px auto; text-align:left; }
+.comment { border-bottom:1px solid #ddd; padding:10px 0; }
+.comment-username { font-weight:bold; }
+.comment-time { color:#666; font-size:12px; }
+#view-more { display:block; margin:10px auto; padding:10px 15px; cursor:pointer; background:#28a745; color:white; border-radius:8px; }
+.share-section { margin-top:30px; }
+.share-section button { margin:5px; }
+.tiktok-section { margin-top:20px; background:#ff0050; color:white; padding:10px; border-radius:8px; display:inline-block; }
+.tiktok-section a { color:white; text-decoration:none; font-weight:bold; }
+#comment-box { display:none; margin-bottom:20px; }
+textarea, input { width:100%; padding:8px; margin-bottom:10px; border-radius:5px; border:1px solid #ccc; }
 </style>
 </head>
 <body>
 
-<!-- HOME PAGE -->
-<div id="home">
-    <h1>Select Course</h1>
-    <div class="course-card" onclick="startCourse('GST111')">GST111</div>
-    <div class="course-card">PHY101</div>
-    <div class="course-card">CHEM101</div>
-    <div class="course-card">BIO101</div>
-    <div class="course-card">MTH101</div>
-    <div class="course-card">LIB101</div>
-</div>
+<h1>Messi vs Ronaldo GOATs Award</h1>
 
-<!-- QUIZ PAGE -->
-<div id="quiz" class="hide">
-    <div id="quiz-card">
-        <div id="timer-bar"><div id="timer-fill"></div></div>
-        <div id="question"></div>
-        <div id="options"></div>
+<div id="countdown"></div>
+
+<div id="container">
+  <div class="card">
+    <img src="https://i.ibb.co/GQW8P8qN/images-16.jpg" class="player" alt="Messi">
+    <h2>Messi</h2>
+    <button onclick="vote('messi')">Vote Messi</button>
+    <p id="messi-count">1,672,448</p>
+    <div class="bar-container">
+      <div id="messi-bar" class="bar" style="width:45%;background:#1E90FF;">45%</div>
     </div>
+  </div>
+
+  <div class="card">
+    <img src="https://i.ibb.co/VWCzf1QP/images.jpg" class="player" alt="Ronaldo">
+    <h2>Cristiano Ronaldo</h2>
+    <button onclick="vote('ronaldo')">Vote Ronaldo</button>
+    <p id="ronaldo-count">1,895,755</p>
+    <div class="bar-container">
+      <div id="ronaldo-bar" class="bar" style="width:55%;background:#FF4500;">55%</div>
+    </div>
+  </div>
 </div>
 
-<!-- RESULT PAGE -->
-<div id="result" class="hide">
-    <h2>Quiz Completed!</h2>
-    <div id="score-text"></div>
-    <button onclick="goHome()">Go Back Home</button>
+<!-- Redirect to Comments -->
+<div style="margin-top:30px;">
+  <button onclick="goRedirect()">View Comments</button>
 </div>
 
-<script>
-let gstQuestions = [
-    {q: "As it was impossible to convey the corpse home, the body was ________ and the ashy remains were flown home for burial", options:["incriminated","preserved","embalmed","cremated"], answer:3},
-    {q: "Bursary awards were re-introduced _____________ due consideration", options:["in view of","because of","owing to","after"], answer:3},
-    {q: "Recent economic challenges strengthened John’s __________ to accept gateman’s job", options:["Resolve","decision","interest","opening"], answer:1},
-    {q: "The modal auxiliary verb in the expression “I can play football very well” expresses", options:["Ability","Willingness","Possibility","Obligation"], answer:0},
-    {q: "If a student reads 2000words in 6mins 40seconds. What is the WPM", options:["540WPM","600WPM","520WPM","480WPM","300WPM"], answer:4},
-    {q: "Sentence which contain two or independent clause", options:["Simple","Compound","Complex","Compound complex"], answer:1},
-    {q: "“He does his work, I mine” is what type of paragraph", options:["Genitive","Ellipsis","Substitution","Conjunction"], answer:1},
-    {q: "How many verbs are in “Singing regularly happens to be my hobby”", options:["3","2","4","5"], answer:1},
-    {q: "A more acceptable recall strategy in reading is", options:["Regression","Cramming","Vocalization","Paraphrasing"], answer:3},
-    {q: "Prepare what _________ will discuss at the forum.", options:["You and them","you and they","them and you","them and I"], answer:1},
-    {q: "Many a woman _________ found true love.", options:["has","having","have","haven’t"], answer:0},
-    {q: "Every day brings ________ own problem.", options:["their","its","it’s","theirs"], answer:1},
-    {q: "He, together with his lovers, ___________ been arrested.", options:["has","have","is","was"], answer:0},
-    {q: "There could be a uniformity of age, but there is always _____ of talents among age-mates.", options:["an anomaly","a distinction","an inequality","an abundant"], answer:2},
-    {q: "It is advisable to _____ any water that has been polluted.", options:["clear","sanitize","sterilize","purify"], answer:3},
-    {q: "He was asked to carry out the investigation thoroughly but he did it _______", options:["hurriedly","impatiently","haphazardly","impartially"], answer:2},
-    {q: "The committee was given the mandate of determining the immediate and _____causes of the students’ crisis.", options:["delayed","obscure","remote","later"], answer:3},
-    {q: "Sentences are broadly classified into", options:["4","2","5","3"], answer:3},
-    {q: "There are _______ broad types of clause in English", options:["2","3","4","5"], answer:3},
-    {q: "In “He behaves like a spirit” the word “spirit” is a/an __________ noun", options:["Collective","Abstract","Proper","Genetive"], answer:1},
-    {q: "The verb “read” in “He reads seriously” is /an _______verb", options:["Abstract","Collective","Proper","Genetive"], answer:0},
-    {q: "In the sentence “He gave her something to give them or us” there are ________ pronouns", options:["2","3","4","5"], answer:3},
-    {q: "The word “Beautify” can be segmented as _______", options:["Beautify + o","Beauty+o","Beauty+fy","Be+autify"], answer:2},
-    {q: "Paragraph are categorized into ________ major kinds", options:["2","3","4","5"], answer:0},
-    {q: "In the sentence “Olu used the bag” the morpheme added in “used” is", options:["–ed","–d","–us","– u"], answer:1},
-    {q: "Paragraph coherence entails the arrangement of __________ sentence in paragraph", options:["Coherence","Meaningful","Logical","Sentential"], answer:2},
-    {q: "What is the percentage of noun element in the sentence “The students are in the class”", options:["24.2%","50%","66.6%","33.33%"], answer:3},
-    {q: "Words or phrase that help a writer move smoothly from one sentence to the next and show logical relationship between them in a paragraph", options:["Acronyms devices","Important devices","Transitional devices","Parental devices"], answer:2},
-    {q: "My teacher and sister ________ advised me to be serious.", options:["have","has","is","was"], answer:1},
-    {q: "Seven hours _________ spent already.", options:["was been","is been","has been","have been"], answer:2},
-    {q: "Twenty kilometres __________ covered.", options:["has been","have been","has being","have being"], answer:0},
-    {q: "I, your creator, _________ the one teaching you.", options:["is","am","has been","have being"], answer:1},
-    {q: "More than one new hostel ______ built annually.", options:["have been","has being","are","is"], answer:3},
-    {q: "The President made a nation-wide _________ on the removal of fuel subsidy", options:["broadcast","Prophecy","Polemics","decree"], answer:0},
-    {q: "The government set up a Commission of inquiry _________ the award of contracts by the Board of Directors of the Corporation", options:["about","for","into","to"], answer:1},
-    {q: "Dr. Stone’s lecture has given me a great _____________ into the problem of juvenile delinquency", options:["glimpse","knowledge","insight","opening"], answer:2},
-    {q: "Mary and Janet are sisters; the former is a teacher and the _________ is a sentence", options:["later","other","prior","latter"], answer:3},
-    {q: "The Manager says he doesn’t want to employ beginners who wish to learn the job; he wants ________ persons", options:["experimental","experienced","exposed","experienced"], answer:3},
-    {q: "The Holy Book _________ we should be honest.", options:["said","says","had said","was saying"], answer:1},
-    {q: "Evidence before us ________ the case.", options:["proves","prove","are proving","are proven"], answer:0},
-    {q: "Neither the leader nor his followers will lose_______ popularity.", options:["his","their","the","our"], answer:1},
-    {q: "The workers as well as their boss ________ late often.", options:["works","work","is working","does work late"], answer:1},
-    {q: "Four hours fifteen minutes _______ enough to write the test.", options:["are","were","is","have been"], answer:2},
-    {q: "One of the law makers who _______ at the Senate was once a university lecturer.", options:["are","was","were","is"], answer:3},
-    {q: "Aeroplane _______ strict monitoring.", options:["requires","require","do requires","does require"], answer:0},
-    {q: "His routine _____ sweeping.", options:["comprises","comprises of","consists","consist of"], answer:2},
-    {q: "How to effectively read many books _________ not difficult.", options:["are","has","is","have"], answer:2},
-    {q: "My nephew, Deji, has just earned his _________ degree.", options:["masters","masters’","master’s","none of the above"], answer:1},
-    {q: "There ______ many more service available for tourists to Nigeria.", options:["have being","has been","is","are"], answer:3},
-    {q: "A popular choice ________ the Premier Hotel suites.", options:["is","are","has being","are being"], answer:0},
-    {q: "Reading a novel sometimes ______ me happy.", options:["makes","make","is making","have made"], answer:0},
-    {q: "Each of the author’s literary works _______ a similar plot.", options:["are","is having","has","have"], answer:2},
-    {q: "Neither of the girls _______ well to school.", options:["dresses","dressing","dress","do dress"], answer:2},
-    {q: "One of the global challenges _______ food shortage.", options:["are being","is being","are","is"], answer:3},
-    {q: "Most research on tomatoes _____ from IITA, Ibadan.", options:["are being","is being","are","is"], answer:3},
-    {q: "Different kinds of oranges _______ in different parts of the world", options:["thrive","thrives","thriving","none of the above"], answer:0},
-    {q: "Most of these automobiles _______ good tyres.", options:["has","have","has hand","does not have"], answer:1},
-    {q: "Each of the judges________ that the defendant is innocent.", options:["agree","agrees","have agreed","have been agreed"], answer:1},
-    {q: "A less expensive alternative _______ studio apartment.", options:["are","is","have been","has being"], answer:1},
-    {q: "Wickedness is inherent in man.", options:["inherited","innate","injected","initiated"], answer:1}
-];
+<p id="redirect-warning">Don't mind the redirect. Click again to open the actual comments section.</p>
 
-let shuffledQuestions = [];
-let currentQuestionIndex = 0;
-let score = 0;
-let timer;
-let timeLeft = 10;
+<!-- Comment Section -->
+<div id="comment-box">
+  <input type="text" id="username" placeholder="Username"><br>
+  <textarea id="comment-text" placeholder="Write your comment"></textarea><br>
+  <button onclick="addComment()">Post Comment</button>
+</div>
+<div class="comment-section" id="comments"></div>
+<button id="view-more" onclick="loadMore()">View More Comments</button>
 
-function startCourse(course) {
-    if(course === "GST111") {
-        document.getElementById("home").classList.add("hide");
-        document.getElementById("quiz").classList.remove("hide");
-        shuffledQuestions = shuffleArray([...gstQuestions]);
-        currentQuestionIndex = 0;
-        score = 0;
-        showQuestion();
-    }
-}
+<!-- Share Section -->
+<div class="share-section">
+  <p>Share to support your GOAT!</p>
+  <button onclick="share('whatsapp')">WhatsApp</button>
+  <button onclick="share('facebook')">Facebook</button>
+  <button onclick="share('twitter')">X</button>
+  <button onclick="share('telegram')">Telegram</button>
+  <button onclick="copyLink()">Copy Link</button>
+</div>
 
-function showQuestion() {
-    clearTimer();
-    timeLeft = 10;
-    updateTimerBar();
+<!-- TikTok Follow -->
+<div class="tiktok-section">
+  Follow for more on TikTok: <a href="https://www.tiktok.com/@prof.lord.peps?_r=1&_t=ZS-91yYLzVtT32" target="_blank">@prof.lord.peps</a>
+</div>
 
-    if(currentQuestionIndex >= shuffledQuestions.length){
-        showResult();
-        return;
-    }
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+  import { getDatabase, ref, onValue, set, get, update } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
-    let q = shuffledQuestions[currentQuestionIndex];
-    document.getElementById("question").innerText = q.q;
-    let optionsDiv = document.getElementById("options");
-    optionsDiv.innerHTML = "";
+  const firebaseConfig = {
+    apiKey: "AIzaSyB12392sEB9g1YFB9IimSR5crStMtiCej4",
+    authDomain: "goatawards-c9492.firebaseapp.com",
+    projectId: "goatawards-c9492",
+    storageBucket: "goatawards-c9492.firebasestorage.app",
+    messagingSenderId: "769373875392",
+    appId: "1:769373875392:web:08d553f8c561577941d125",
+    databaseURL: "https://goatawards-c9492-default-rtdb.firebaseio.com/"
+  };
 
-    q.options.forEach((option, index) => {
-        let btn = document.createElement("button");
-        btn.innerText = option;
-        btn.classList.add("option-btn");
-        btn.onclick = () => selectOption(index);
-        optionsDiv.appendChild(btn);
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  const votesRef = ref(db, 'votes');
+
+  function updateVotesDisplay(data){
+    const votes = data.val();
+    let total = votes.messi + votes.ronaldo;
+    document.getElementById("messi-count").innerText = votes.messi.toLocaleString();
+    document.getElementById("ronaldo-count").innerText = votes.ronaldo.toLocaleString();
+    document.getElementById("messi-bar").style.width = ((votes.messi/total)*100).toFixed(1)+"%";
+    document.getElementById("messi-bar").innerText = ((votes.messi/total)*100).toFixed(1)+"%";
+    document.getElementById("ronaldo-bar").style.width = ((votes.ronaldo/total)*100).toFixed(1)+"%";
+    document.getElementById("ronaldo-bar").innerText = ((votes.ronaldo/total)*100).toFixed(1)+"%";
+  }
+
+  onValue(votesRef, (snapshot) => {
+    updateVotesDisplay(snapshot);
+  });
+
+  function vote(player){
+    get(votesRef).then(snapshot=>{
+      let votesData = snapshot.val();
+      votesData[player]++;
+      set(votesRef, votesData);
     });
-
-    startTimer();
-}
-
-function selectOption(selectedIndex) {
-    clearTimer();
-    let q = shuffledQuestions[currentQuestionIndex];
-    let buttons = document.querySelectorAll(".option-btn");
-
-    buttons.forEach((btn, i) => {
-        if(i === q.answer) btn.classList.add("correct");
-        if(i === selectedIndex && i !== q.answer) btn.classList.add("wrong");
-    });
-
-    if(selectedIndex === q.answer) score++;
-    currentQuestionIndex++;
-    setTimeout(showQuestion, 1000);
-}
-
-function showResult() {
-    document.getElementById("quiz").classList.add("hide");
-    document.getElementById("result").classList.remove("hide");
-    let percentage = Math.round((score/shuffledQuestions.length)*100);
-    document.getElementById("score-text").innerText = `Score: ${score} / ${shuffledQuestions.length}\nPercentage: ${percentage}%`;
-}
-
-function goHome() {
-    document.getElementById("result").classList.add("hide");
-    document.getElementById("home").classList.remove("hide");
-}
-
-// Timer functions
-function startTimer() {
-    timer = setInterval(() => {
-        timeLeft--;
-        updateTimerBar();
-        if(timeLeft <= 0){
-            selectOption(-1); // treat as wrong
-        }
-    }, 1000);
-}
-
-function clearTimer() {
-    clearInterval(timer);
-}
-
-function updateTimerBar() {
-    document.getElementById("timer-fill").style.width = (timeLeft/10*100) + "%";
-}
-
-// Shuffle function
-function shuffleArray(array) {
-    for(let i = array.length-1; i>0; i--){
-        let j = Math.floor(Math.random()*(i+1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
+  }
 </script>
 
+<script>
+// ====== Countdown Timer ======
+let countdownDate = new Date("Dec 23, 2025 23:59:59").getTime();
+let x = setInterval(()=>{
+  let now = new Date().getTime();
+  let distance = countdownDate - now;
+  if(distance<0){ clearInterval(x); document.getElementById("countdown").innerText="Voting Closed — Winner will be announced on 24th December!"; return; }
+  let days=Math.floor(distance/(1000*60*60*24));
+  let hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+  let minutes=Math.floor((distance%(1000*60*60))/(1000*60));
+  let seconds=Math.floor((distance%(1000*60))/1000);
+  document.getElementById("countdown").innerText=`Voting ends in ${days}d ${hours}h ${minutes}m ${seconds}s`;
+},1000);
+
+// ====== Redirect Logic ======
+let redirectClicked = false;
+function goRedirect(){
+  if(!redirectClicked){
+    redirectClicked = true;
+    document.getElementById("redirect-warning").style.display="block";
+  } else {
+    document.getElementById("redirect-warning").style.display="none";
+    document.getElementById("comment-box").style.display="block";
+    loadMore();
+  }
+}
+
+// ====== Comments ======
+let fakeComments = [];
+for(let i=1;i<=60;i++){
+    let randomTime = new Date(2025,10,25 + Math.floor(Math.random()*30),9 + Math.floor(Math.random()*14),Math.floor(Math.random()*60));
+    fakeComments.push({username:"User"+(i%15+1), text:"This is a GOAT comment #"+i, time:randomTime.toLocaleString()});
+}
+let commentsContainer = document.getElementById("comments");
+let commentsLoaded = 0;
+let loadStep = 20;
+
+function loadMore(){
+  let max = Math.min(commentsLoaded+loadStep, fakeComments.length);
+  for(let i=commentsLoaded;i<max;i++){
+    let c = document.createElement("div");
+    c.className="comment";
+    c.innerHTML=`<span class="comment-username">${fakeComments[i].username}</span>: ${fakeComments[i].text}<br><span class="comment-time">${fakeComments[i].time}</span>`;
+    commentsContainer.appendChild(c);
+  }
+  commentsLoaded = max;
+  if(commentsLoaded>=fakeComments.length){
+    document.getElementById("view-more").innerText="Unable to load previous comments";
+    document.getElementById("view-more").disabled=true;
+  }
+}
+
+function addComment(){
+  let u=document.getElementById("username").value||"Anonymous";
+  let t=document.getElementById("comment-text").value;
+  if(!t) return alert("Comment cannot be empty!");
+  let d=new Date().toLocaleString();
+  let c=document.createElement("div");
+  c.className="comment";
+  c.innerHTML=`<span class="comment-username">${u}</span>: ${t}<br><span class="comment-time">${d}</span>`;
+  commentsContainer.prepend(c);
+  document.getElementById("comment-text").value="";
+}
+
+// Auto-generate new comments every minute
+setInterval(()=>{
+  for(let i=0;i<10;i++){
+    let d=new Date();
+    let c=document.createElement("div");
+    c.className="comment";
+    c.innerHTML=`<span class="comment-username">User${Math.floor(Math.random()*15+1)}</span>: This is a new comment<br><span class="comment-time">${d.toLocaleString()}</span>`;
+    commentsContainer.prepend(c);
+  }
+},60000);
+
+// Share Buttons
+function share(platform){
+  let url=encodeURIComponent(window.location.href);
+  let text=encodeURIComponent("Support your GOAT now! Messi or Ronaldo?");
+  let shareUrl="";
+  if(platform==="whatsapp") shareUrl=`https://wa.me/?text=${text}%20${url}`;
+  if(platform==="facebook") shareUrl=`https://www.facebook.com/sharer/sharer.php?u=${url}`;
+  if(platform==="twitter") shareUrl=`https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+  if(platform==="telegram") shareUrl=`https://t.me/share/url?url=${url}&text=${text}`;
+  window.open(shareUrl,"_blank");
+}
+function copyLink(){ navigator.clipboard.writeText(window.location.href); alert("Link copied!"); }
+</script>
 </body>
 </html>
