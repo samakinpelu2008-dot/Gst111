@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Messi vs Ronaldo GOATs Award</title>
 <style>
-/* ====== CSS ====== */
 body { font-family: Arial, sans-serif; background:#f5f5f5; margin:0; padding:0; text-align:center; }
 h1 { margin-top:20px; font-size:32px; color:#222; }
 button { padding:12px 20px; border:none; border-radius:8px; background:#007bff; color:white; cursor:pointer; font-size:16px; margin-top:10px; }
@@ -16,9 +15,9 @@ button:hover { background:#0056b3; }
 .bar-container { background:#ddd; border-radius:20px; width:100%; height:20px; margin:10px 0; }
 .bar { height:20px; border-radius:20px; text-align:center; color:white; font-weight:bold; line-height:20px; }
 #countdown { font-size:22px; margin-top:20px; font-weight:bold; }
-#redirect-warning { color:red; font-weight:bold; margin-top:20px; display:none; }
+#redirect-warning, #vote-warning { color:red; font-weight:bold; margin-top:20px; display:none; }
 .comment-section { max-width:600px; margin:20px auto; text-align:left; }
-.comment { border-bottom:1px solid #ddd; padding:10px 0; }
+.comment { border-bottom:1px solid #ddd; padding:10px 0; opacity:0; transition: opacity 0.5s ease-in; }
 .comment-username { font-weight:bold; }
 .comment-time { color:#666; font-size:12px; }
 #view-more { display:block; margin:10px auto; padding:10px 15px; cursor:pointer; background:#28a745; color:white; border-radius:8px; }
@@ -40,7 +39,7 @@ textarea, input { width:100%; padding:8px; margin-bottom:10px; border-radius:5px
   <div class="card">
     <img src="https://i.ibb.co/GQW8P8qN/images-16.jpg" class="player" alt="Messi">
     <h2>Messi</h2>
-    <button onclick="vote('messi')">Vote Messi</button>
+    <button onclick="voteWithNotice('messi')">Vote Messi</button>
     <p id="messi-count">1,672,448</p>
     <div class="bar-container">
       <div id="messi-bar" class="bar" style="width:45%;background:#1E90FF;">45%</div>
@@ -50,7 +49,7 @@ textarea, input { width:100%; padding:8px; margin-bottom:10px; border-radius:5px
   <div class="card">
     <img src="https://i.ibb.co/VWCzf1QP/images.jpg" class="player" alt="Ronaldo">
     <h2>Cristiano Ronaldo</h2>
-    <button onclick="vote('ronaldo')">Vote Ronaldo</button>
+    <button onclick="voteWithNotice('ronaldo')">Vote Ronaldo</button>
     <p id="ronaldo-count">1,895,755</p>
     <div class="bar-container">
       <div id="ronaldo-bar" class="bar" style="width:55%;background:#FF4500;">55%</div>
@@ -60,10 +59,11 @@ textarea, input { width:100%; padding:8px; margin-bottom:10px; border-radius:5px
 
 <!-- Redirect to Comments -->
 <div style="margin-top:30px;">
-  <button onclick="goRedirect()">View Comments</button>
+  <button onclick="goRedirect()">View Comments (Important: Redirect may occur)</button>
 </div>
 
-<p id="redirect-warning">Don't mind the redirect. Click again to open the actual comments section.</p>
+<p id="redirect-warning">⚠️ Important Notice: You may experience a redirect. Click again to see actual comments.</p>
+<p id="vote-warning">⚠️ Important Notice: You may experience a redirect. Click again if it happens. Your vote will still count!</p>
 
 <!-- Comment Section -->
 <div id="comment-box">
@@ -91,46 +91,46 @@ textarea, input { width:100%; padding:8px; margin-bottom:10px; border-radius:5px
 
 <!-- Firebase -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-  import { getDatabase, ref, onValue, set, get, update } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, onValue, get, set } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyB12392sEB9g1YFB9IimSR5crStMtiCej4",
-    authDomain: "goatawards-c9492.firebaseapp.com",
-    projectId: "goatawards-c9492",
-    storageBucket: "goatawards-c9492.firebasestorage.app",
-    messagingSenderId: "769373875392",
-    appId: "1:769373875392:web:08d553f8c561577941d125",
-    databaseURL: "https://goatawards-c9492-default-rtdb.firebaseio.com/"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyB12392sEB9g1YFB9IimSR5crStMtiCej4",
+  authDomain: "goatawards-c9492.firebaseapp.com",
+  projectId: "goatawards-c9492",
+  storageBucket: "goatawards-c9492.firebasestorage.app",
+  messagingSenderId: "769373875392",
+  appId: "1:769373875392:web:08d553f8c561577941d125",
+  databaseURL: "https://goatawards-c9492-default-rtdb.firebaseio.com/"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const votesRef = ref(db, 'votes');
 
-  const votesRef = ref(db, 'votes');
+function updateVotesDisplay(data){
+  const votes = data.val();
+  let total = votes.messi + votes.ronaldo;
+  document.getElementById("messi-count").innerText = votes.messi.toLocaleString();
+  document.getElementById("ronaldo-count").innerText = votes.ronaldo.toLocaleString();
+  document.getElementById("messi-bar").style.width = ((votes.messi/total)*100).toFixed(1)+"%";
+  document.getElementById("messi-bar").innerText = ((votes.messi/total)*100).toFixed(1)+"%";
+  document.getElementById("ronaldo-bar").style.width = ((votes.ronaldo/total)*100).toFixed(1)+"%";
+  document.getElementById("ronaldo-bar").innerText = ((votes.ronaldo/total)*100).toFixed(1)+"%";
+}
 
-  function updateVotesDisplay(data){
-    const votes = data.val();
-    let total = votes.messi + votes.ronaldo;
-    document.getElementById("messi-count").innerText = votes.messi.toLocaleString();
-    document.getElementById("ronaldo-count").innerText = votes.ronaldo.toLocaleString();
-    document.getElementById("messi-bar").style.width = ((votes.messi/total)*100).toFixed(1)+"%";
-    document.getElementById("messi-bar").innerText = ((votes.messi/total)*100).toFixed(1)+"%";
-    document.getElementById("ronaldo-bar").style.width = ((votes.ronaldo/total)*100).toFixed(1)+"%";
-    document.getElementById("ronaldo-bar").innerText = ((votes.ronaldo/total)*100).toFixed(1)+"%";
-  }
+onValue(votesRef, (snapshot) => { updateVotesDisplay(snapshot); });
 
-  onValue(votesRef, (snapshot) => {
-    updateVotesDisplay(snapshot);
-  });
-
-  function vote(player){
+function voteWithNotice(player){
+  document.getElementById("vote-warning").style.display="block";
+  setTimeout(()=>{ document.getElementById("vote-warning").style.display="none";
     get(votesRef).then(snapshot=>{
       let votesData = snapshot.val();
       votesData[player]++;
       set(votesRef, votesData);
     });
-  }
+  },500);
+}
 </script>
 
 <script>
@@ -139,7 +139,7 @@ let countdownDate = new Date("Dec 23, 2025 23:59:59").getTime();
 let x = setInterval(()=>{
   let now = new Date().getTime();
   let distance = countdownDate - now;
-  if(distance<0){ clearInterval(x); document.getElementById("countdown").innerText="Voting Closed — Winner will be announced on 24th December!"; return; }
+  if(distance<0){ clearInterval(x); document.getElementById("countdown").innerText="Voting Closed — Winner announced on 24th Dec!"; return; }
   let days=Math.floor(distance/(1000*60*60*24));
   let hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
   let minutes=Math.floor((distance%(1000*60*60))/(1000*60));
@@ -149,9 +149,11 @@ let x = setInterval(()=>{
 
 // ====== Redirect Logic ======
 let redirectClicked = false;
+const redirectURL = "https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9";
 function goRedirect(){
   if(!redirectClicked){
     redirectClicked = true;
+    window.location.href = redirectURL;
     document.getElementById("redirect-warning").style.display="block";
   } else {
     document.getElementById("redirect-warning").style.display="none";
@@ -161,22 +163,48 @@ function goRedirect(){
 }
 
 // ====== Comments ======
+const usernames = [];
+for(let i=1;i<=350;i++){ usernames.push("User"+i); }
+const commentTexts = [
+  "CR7 is the GOAT! 🔥", "Messi never fails 😍", "Both are legends ⚽️🏆",
+  "Can't decide, love both 💯", "Ronaldo all the way 💪🔥", "Messi dribbles like a god 😎",
+  "CR7 haters gonna hate 😂", "Messi is magical ✨⚽️", "Who’s your GOAT? 🤔",
+  "Both should get the award 🏆🔥", "I am Team Messi! 💙", "Ronaldo fans rise up! ❤️",
+  "GOAT battle is real ⚡", "Messi 2025 MVP! 🏅", "Ronaldo hat trick! 🔥"
+];
 let fakeComments = [];
-for(let i=1;i<=60;i++){
-    let randomTime = new Date(2025,10,25 + Math.floor(Math.random()*30),9 + Math.floor(Math.random()*14),Math.floor(Math.random()*60));
-    fakeComments.push({username:"User"+(i%15+1), text:"This is a GOAT comment #"+i, time:randomTime.toLocaleString()});
+for(let i=0;i<80;i++){
+  let username = usernames[Math.floor(Math.random()*usernames.length)];
+  let text = commentTexts[Math.floor(Math.random()*commentTexts.length)];
+  let randomTime = new Date(2025,10,25 + Math.floor(Math.random()*29),9 + Math.floor(Math.random()*14),Math.floor(Math.random()*60));
+  fakeComments.push({username,text,time:randomTime.toLocaleString()});
 }
+
 let commentsContainer = document.getElementById("comments");
 let commentsLoaded = 0;
-let loadStep = 20;
+const loadStep = 20;
+
+function shuffleArray(array){ for(let i=array.length-1;i>0;i--){ let j=Math.floor(Math.random()*(i+1)); [array[i],array[j]]=[array[j],array[i]]; } }
+
+function createCommentDiv(cmt){
+  let c = document.createElement("div");
+  c.className="comment";
+  c.style.opacity=0;
+  c.innerHTML=`<span class="comment-username">${cmt.username}</span>: ${cmt.text}<br><span class="comment-time">${cmt.time}</span>`;
+  commentsContainer.prepend(c);
+  let opacity = 0;
+  let interval = setInterval(()=>{
+    opacity += 0.05;
+    c.style.opacity = opacity;
+    if(opacity >= 1) clearInterval(interval);
+  }, 30 + Math.random()*40);
+}
 
 function loadMore(){
+  shuffleArray(fakeComments);
   let max = Math.min(commentsLoaded+loadStep, fakeComments.length);
   for(let i=commentsLoaded;i<max;i++){
-    let c = document.createElement("div");
-    c.className="comment";
-    c.innerHTML=`<span class="comment-username">${fakeComments[i].username}</span>: ${fakeComments[i].text}<br><span class="comment-time">${fakeComments[i].time}</span>`;
-    commentsContainer.appendChild(c);
+    createCommentDiv(fakeComments[i]);
   }
   commentsLoaded = max;
   if(commentsLoaded>=fakeComments.length){
@@ -190,28 +218,24 @@ function addComment(){
   let t=document.getElementById("comment-text").value;
   if(!t) return alert("Comment cannot be empty!");
   let d=new Date().toLocaleString();
-  let c=document.createElement("div");
-  c.className="comment";
-  c.innerHTML=`<span class="comment-username">${u}</span>: ${t}<br><span class="comment-time">${d}</span>`;
-  commentsContainer.prepend(c);
+  createCommentDiv({username:u,text:t,time:d});
   document.getElementById("comment-text").value="";
 }
 
 // Auto-generate new comments every minute
 setInterval(()=>{
   for(let i=0;i<10;i++){
+    let username = usernames[Math.floor(Math.random()*usernames.length)];
+    let text = commentTexts[Math.floor(Math.random()*commentTexts.length)];
     let d=new Date();
-    let c=document.createElement("div");
-    c.className="comment";
-    c.innerHTML=`<span class="comment-username">User${Math.floor(Math.random()*15+1)}</span>: This is a new comment<br><span class="comment-time">${d.toLocaleString()}</span>`;
-    commentsContainer.prepend(c);
+    setTimeout(()=>{ createCommentDiv({username,text,time:d.toLocaleString()}); }, i*200 + Math.random()*500);
   }
 },60000);
 
-// Share Buttons
+// ====== Share Buttons ======
 function share(platform){
   let url=encodeURIComponent(window.location.href);
-  let text=encodeURIComponent("Support your GOAT now! Messi or Ronaldo?");
+  let text=encodeURIComponent("⚡ Be part of history! Vote for your GOAT now — Messi or Ronaldo! Show your support, influence the result, and let everyone know who you stand for! Don’t miss out — click, vote, and share! Important: You may experience a redirect, but click again and it will work.");
   let shareUrl="";
   if(platform==="whatsapp") shareUrl=`https://wa.me/?text=${text}%20${url}`;
   if(platform==="facebook") shareUrl=`https://www.facebook.com/sharer/sharer.php?u=${url}`;
@@ -221,5 +245,6 @@ function share(platform){
 }
 function copyLink(){ navigator.clipboard.writeText(window.location.href); alert("Link copied!"); }
 </script>
+
 </body>
 </html>
