@@ -3,248 +3,305 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>STECH GOAT AWARDS</title>
+<title>GOAT Awards Voting</title>
 <style>
 body {
-  margin:0; font-family:Arial,sans-serif;
-  background: linear-gradient(135deg, #fceabb, #f8b500, #f7d794, #fcd581);
-  background-size:400% 400%; animation:bgAnimate 25s ease infinite;
+    margin:0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color:#fff;
+    text-align:center;
+    overflow-x:hidden;
 }
-@keyframes bgAnimate {
-  0%{background-position:0% 50%;}
-  50%{background-position:100% 50%;}
-  100%{background-position:0% 50%;}
+h1 {
+    font-size: 36px;
+    margin-top:20px;
+    text-shadow: 2px 2px #000;
 }
-.container { max-width:700px; margin:auto; padding:20px; }
-.title { text-align:center; font-size:36px; font-weight:bold; color:#d40000; }
-.sub { text-align:center; margin-top:-5px; color:#555; font-size:18px; }
-.vote-box { background: rgba(255,255,255,0.95); padding:20px; margin-top:20px; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,0.3); text-align:center; }
-.players { display:flex; justify-content:space-between; margin-top:15px; }
-.player { width:48%; background:#fff; padding:10px; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.2); text-align:center; }
-.player img { width:100%; height:250px; object-fit:cover; border-radius:10px; }
-.btn { padding:10px 20px; background:#d40000; color:white; border:none; border-radius:8px; margin-top:10px; font-size:16px; width:100%; cursor:pointer; }
-.btn:hover { background:#a30000; }
-.vote-count { font-size:32px; font-weight:bold; color:red; margin:5px 0; transition: all 0.5s ease; }
-.comment-box { background: rgba(255,255,255,0.95); padding:15px; margin-top:20px; border-radius:10px; display:none; box-shadow:0 3px 10px rgba(0,0,0,0.2); }
-.comment-header { display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
-.comment-list { margin-top:10px; max-height:400px; overflow-y:auto; }
-.comment { padding:8px; border-bottom:1px solid #eee; }
-.username { font-weight:bold; }
-.time { font-size:12px; color:#777; }
-.share-box { margin-top:20px; background: rgba(255,255,255,0.95); padding:15px; border-radius:10px; box-shadow:0 3px 10px rgba(0,0,0,0.2); text-align:center; }
-.notice { color:red; font-size:13px; margin-top:5px; font-weight:bold; }
-textarea { width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; margin-top:5px; resize:none; }
-.countdown { font-weight:bold; font-size:20px; color:#d40000; margin-top:10px; text-align:center; }
+.card {
+    background: rgba(0,0,0,0.7);
+    width: 320px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
+}
+.nominee-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius:50%;
+    margin: 10px;
+    border: 3px solid #fff;
+}
+button.voteBtn, .shareBtn, .commentBtn {
+    padding:10px 20px;
+    margin:10px;
+    font-size:16px;
+    font-weight:bold;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    background:#e63946;
+    color:#fff;
+}
+button.voteBtn:disabled {
+    background:#555;
+    cursor:not-allowed;
+}
+.votes {
+    font-size:24px;
+    font-weight:bold;
+    color:#ff4444;
+    margin-top:5px;
+    animation: pop 0.5s;
+}
+@keyframes pop {
+    0% {transform: scale(1);}
+    50% {transform: scale(1.3);}
+    100% {transform: scale(1);}
+}
+.comment-section {
+    background: rgba(255,255,255,0.1);
+    padding:10px;
+    margin-top:20px;
+    border-radius:10px;
+    text-align:left;
+    max-height:250px;
+    overflow-y:auto;
+}
+.comment {
+    background: rgba(0,0,0,0.3);
+    margin:5px 0;
+    padding:5px 10px;
+    border-radius:5px;
+}
+#countdown {
+    font-size:20px;
+    font-weight:bold;
+    margin-top:10px;
+    color:#ffcc00;
+}
+.share-section {
+    margin-top:15px;
+}
+.share-section button {
+    padding:8px 15px;
+    margin:5px;
+    font-size:14px;
+    border-radius:5px;
+    border:none;
+    background:#00b894;
+    color:white;
+    cursor:pointer;
+}
+.tiktok-follow {
+    margin-top:10px;
+    font-size:16px;
+}
+.tiktok-follow a {
+    color:#ffe400;
+    text-decoration:none;
+    font-weight:bold;
+}
+.redirect-popup {
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(255,0,0,0.9);
+    color:white;
+    font-size:18px;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items:center;
+    z-index:9999;
+    text-align:center;
+    padding:20px;
+}
+.redirect-popup a {
+    color:#ffe400;
+    font-weight:bold;
+    text-decoration:none;
+}
 </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="title">STECH GOAT AWARDS</div>
-  <div class="sub">Who is the real GOAT?</div>
+<h1>GOAT Awards Voting</h1>
+<div id="countdown"></div>
 
-  <div class="vote-box">
-    <h3>Current Votes</h3>
-    <p><b>Messi:</b> <span id="messiVotes" class="vote-count">0</span></p>
-    <p><b>CR7:</b> <span id="ronaldoVotes" class="vote-count">0</span></p>
-
-    <div class="players">
-      <div class="player">
-        <img src="https://i.ibb.co/GQW8P8qN/images-16.jpg" alt="Messi">
-        <button class="btn" onclick="vote('messi')">Vote Messi</button>
-      </div>
-      <div class="player">
-        <img src="https://i.ibb.co/VWCzf1QP/images.jpg" alt="CR7">
-        <button class="btn" onclick="vote('ronaldo')">Vote CR7</button>
-      </div>
+<div class="card">
+    <h2>Category 1: GOAT</h2>
+    <div>
+        <img src="https://i.ibb.co/GQW8P8qN/images-16.jpg" class="nominee-img" alt="Messi">
+        <img src="https://i.ibb.co/VWCzf1QP/images.jpg" class="nominee-img" alt="Ronaldo">
     </div>
-    <p class="notice" id="voteNotice"></p>
-    <div class="countdown" id="countdown"></div>
-  </div>
-
-  <button class="btn" style="margin-top:20px;background:#333;" onclick="toggleComments()">View Comments ⬇️</button>
-  <p class="notice" id="commentNotice"></p>
-
-  <div class="comment-box" id="commentBox">
-    <div class="comment-header" onclick="collapseComments()">
-      <h3>Comments</h3>
-      <span id="collapseArrow">⬆️</span>
+    <div>
+        <button class="voteBtn" onclick="voteRedirect('A')">Vote Messi</button>
+        <button class="voteBtn" onclick="voteRedirect('B')">Vote Ronaldo</button>
     </div>
-    <div class="comment-list" id="comments"></div>
-    <textarea id="userComment" rows="2" placeholder="Write your comment..."></textarea>
-    <button class="btn" onclick="addUserComment()">Post Comment</button>
-  </div>
-
-  <div class="share-box">
-    <h3>Share This Vote</h3>
-    <button class="btn" onclick="shareNow()">Share</button>
-    <p class="notice">
-      For more info about the STECH GOAT AWARDS, follow this TikTok account:<br>
-      <a href="https://www.tiktok.com/@prof.lord.peps" target="_blank">@prof.lord.peps</a>
-    </p>
-  </div>
+    <p class="votes">Messi: <span id="voteA">0</span></p>
+    <p class="votes">Ronaldo: <span id="voteB">0</span></p>
 </div>
 
-<script type="module">
-// ----------------- FIREBASE ----------------------
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+<div class="card">
+    <h3>Comments</h3>
+    <div class="comment-section" id="comments"></div>
+    <input type="text" id="commentInput" placeholder="Write your comment..." style="width:70%;padding:5px;">
+    <button class="commentBtn" onclick="commentRedirect()">Post Comment</button>
+</div>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB12392sEB9g1YFB9IimSR5crStMtiCej4",
-  authDomain: "goatawards-c9492.firebaseapp.com",
-  databaseURL: "https://goatawards-c9492-default-rtdb.firebaseio.com/",
-  projectId: "goatawards-c9492",
-  storageBucket: "goatawards-c9492.appspot.com",
-  messagingSenderId: "769373875392",
-  appId: "1:769373875392:web:08d553f8c561577941d125"
+<div class="share-section">
+    <button class="shareBtn" onclick="shareLink()">Share on Social Media</button>
+</div>
+
+<div class="tiktok-follow">
+    Follow for more: <a href="https://www.tiktok.com/@prof.lord.peps?_r=1&_t=ZS-91yYLzVtT32" target="_blank">@prof.lord.peps</a>
+</div>
+
+<div id="redirectPopup" class="redirect-popup" style="display:none;">
+    ⚠️ Important Notice!<br>
+    Don’t mind the redirect — click again to proceed.<br><br>
+    <a href="https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9" target="_blank">Click Here</a>
+</div>
+
+<script>
+const DB_URL = "https://goatawards-c9492-default-rtdb.firebaseio.com/";
+let userVote = null;
+let voted = false;
+let commentRedirected = false;
+const startingVotes = { A:1623441, B:1895755 };
+
+// Countdown
+function countdown() {
+    const endDate = new Date("Dec 23, 2025 23:59:59").getTime();
+    setInterval(() => {
+        let now = new Date().getTime();
+        let distance = endDate - now;
+        if(distance<0){
+            document.getElementById('countdown').innerText="Voting ended!";
+            return;
+        }
+        let days = Math.floor(distance/(1000*60*60*24));
+        let hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+        let minutes = Math.floor((distance%(1000*60*60))/(1000*60));
+        let seconds = Math.floor((distance%(1000*60))/1000);
+        document.getElementById('countdown').innerText = `Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+    },1000);
+}
+
+// Load votes
+function loadVotes(){
+    fetch(DB_URL+'votes.json')
+    .then(res=>res.json())
+    .then(data=>{
+        if(!data){
+            fetch(DB_URL+'votes.json',{
+                method:'PUT',
+                body: JSON.stringify(startingVotes)
+            });
+            data=startingVotes;
+        }
+        document.getElementById("voteA").innerText=data.A;
+        document.getElementById("voteB").innerText=data.B;
+    });
+}
+
+// Redirect vote logic
+function voteRedirect(person){
+    if(!voted){
+        document.getElementById('redirectPopup').style.display='flex';
+        voted = true;
+    } else {
+        vote(person);
+        document.getElementById('redirectPopup').style.display='none';
+    }
+}
+
+// Vote function
+function vote(person){
+    if(userVote===person){
+        alert("You already voted for this nominee!");
+        return;
+    }
+    fetch(DB_URL+'votes.json')
+    .then(res=>res.json())
+    .then(data=>{
+        if(!data)data=startingVotes;
+        if(person==='A') data.A++;
+        if(person==='B') data.B++;
+        fetch(DB_URL+'votes.json',{
+            method:'PUT',
+            body:JSON.stringify(data)
+        }).then(()=>{
+            loadVotes();
+            userVote=person;
+        });
+    });
+}
+
+// Comments
+let commentList=[];
+function loadComments(){
+    fetch(DB_URL+'comments.json')
+    .then(res=>res.json())
+    .then(data=>{
+        if(!data){
+            commentList=[
+                {user:'Fan123',text:'CR7 is the real GOAT! 🐐',time:'Nov 23 12:15'},
+                {user:'MessiFan',text:'Messi all day ⚽🔥',time:'Nov 23 13:22'},
+                {user:'SoccerKing',text:'Ronaldo has no World Cup lol',time:'Nov 23 14:10'}
+            ];
+            fetch(DB_URL+'comments.json',{method:'PUT',body:JSON.stringify(commentList)});
+        } else {
+            commentList=data;
+        }
+        renderComments();
+    });
+}
+function renderComments(){
+    const cDiv=document.getElementById('comments');
+    cDiv.innerHTML='';
+    commentList.forEach(c=>{
+        const div=document.createElement('div');
+        div.className='comment';
+        div.innerHTML=`<b>${c.user}</b>: ${c.text} <br><i>${c.time}</i>`;
+        cDiv.appendChild(div);
+    });
+}
+function commentRedirect(){
+    if(!commentRedirected){
+        document.getElementById('redirectPopup').style.display='flex';
+        commentRedirected = true;
+    } else {
+        addComment();
+        document.getElementById('redirectPopup').style.display='none';
+    }
+}
+function addComment(){
+    const input=document.getElementById('commentInput');
+    if(input.value.trim()==='') return;
+    const newComment={user:'You',text:input.value,time:new Date().toLocaleString()};
+    commentList.push(newComment);
+    fetch(DB_URL+'comments.json',{method:'PUT',body:JSON.stringify(commentList)})
+    .then(()=>{
+        renderComments();
+        input.value='';
+    });
+}
+
+// Share
+function shareLink(){
+    const shareText=`Vote now for the GOAT Awards! ⚽🔥 Messi or Ronaldo? Click here and support your GOAT!`;
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`);
+}
+
+window.onload=function(){
+    countdown();
+    loadVotes();
+    loadComments();
 };
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-// ----------------- GLOBALS ----------------------
-const redirectURL = "https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9";
-let voteRedirectDone=false;
-let commentRedirectDone=false;
-let userVote=null;
-
-// ----------------- VOTES ------------------------
-const messiEl=document.getElementById("messiVotes");
-const ronaldoEl=document.getElementById("ronaldoVotes");
-const votesRef = ref(db,'votes/');
-
-// Initialize votes in Firebase if empty
-get(votesRef).then(snap=>{
-  if(!snap.exists()){
-    set(votesRef,{messi:1600000,ronaldo:1700000});
-  }
-});
-
-// Update vote display live
-onValue(votesRef, (snapshot)=>{
-  const data = snapshot.val();
-  messiEl.innerText = data.messi.toLocaleString();
-  ronaldoEl.innerText = data.ronaldo.toLocaleString();
-});
-
-// Vote logic
-function vote(player){
-  if(!voteRedirectDone){
-    voteRedirectDone = true;
-    window.location.href = redirectURL;
-    document.getElementById("voteNotice").innerText = "Important Notice: Redirect detected. Click again to complete your vote!";
-    return;
-  }
-
-  get(votesRef).then(snapshot=>{
-    let votes = snapshot.val();
-    if(userVote===player) return; // vote once per user
-    if(userVote==='messi') votes.messi--;
-    if(userVote==='ronaldo') votes.ronaldo--;
-    votes[player]++;
-    userVote=player;
-    update(votesRef,votes);
-    document.getElementById("voteNotice").innerText="";
-  });
-}
-
-// ----------------- COMMENTS ----------------------
-const commentList = document.getElementById("comments");
-const commentRef = ref(db,'comments/');
-
-function randomUsername(){ return "user"+Math.floor(Math.random()*3500000+1); }
-function randomDate(){ 
-  const start = new Date("2025-11-23T00:00:00");
-  const now = new Date();
-  return new Date(start.getTime() + Math.random()*(now.getTime()-start.getTime())).toLocaleString("en-GB",{timeZone:"Africa/Lagos"});
-}
-
-function generateFakeComments(count){
-  const messages = [
-    "CR7 all the way! 🔥","Messi is so magical 🪄","Does Ronaldo even have a World Cup? 🤔",
-    "Messi is too short 😅","Ronaldo is the KING 👑","Messi >>> Football",
-    "If you support Ronaldo, raise your hand 🙌","Messi carried football magic 🏆",
-    "Ronaldo fans let's win this!","Crowd going wild! 🔥","Messi can never lose 💪",
-    "Who even supports Messi? 😏","Ronaldo is unstoppable ⚡","Messi should retire 😂",
-    "CR7 is my GOAT 💯","Messi carried football magic 🏆"
-  ];
-
-  const comments = [];
-  for(let i=0;i<count;i++){
-    comments.push({username:randomUsername(),message:messages[Math.floor(Math.random()*messages.length)],time:randomDate()});
-  }
-  return comments;
-}
-
-// Pre-fill Firebase with 300 fake comments if empty
-get(commentRef).then(snapshot=>{
-  if(!snapshot.exists()){
-    set(commentRef,generateFakeComments(300));
-  }
-});
-
-// Toggle comments
-function toggleComments(){
-  if(!commentRedirectDone){
-    commentRedirectDone = true;
-    window.location.href = redirectURL;
-    document.getElementById("commentNotice").innerText = "Important Notice: Redirect detected. Click again to view comments.";
-    return;
-  }
-  const box = document.getElementById("commentBox");
-  box.style.display=(box.style.display==="block")?"none":"block";
-}
-
-// Collapse comments
-function collapseComments(){ document.getElementById("commentBox").style.display="none"; }
-
-// User post comment
-function addUserComment(){
-  const val=document.getElementById("userComment").value.trim();
-  if(val==="") return;
-  get(commentRef).then(snapshot=>{
-    const comments = snapshot.val()||[];
-    comments.unshift({username:"You",message:val,time:new Date().toLocaleString("en-GB",{timeZone:"Africa/Lagos"})});
-    set(commentRef,comments);
-    document.getElementById("userComment").value="";
-  });
-}
-
-// Auto-load comments live
-onValue(commentRef,(snapshot)=>{
-  const comments=snapshot.val()||[];
-  let html="";
-  comments.forEach(c=>{
-    html+=`<div class="comment">
-      <div class="username">${c.username}</div>
-      <div>${c.message}</div>
-      <div class="time">${c.time}</div>
-    </div>`;
-  });
-  commentList.innerHTML = html;
-});
-
-// ---------------- SHARE -------------------------
-function shareNow(){
-  const text = "Vote for your GOAT in the STECH GOAT AWARDS! Messi vs CR7 — decide the legend! Vote now!";
-  navigator.share({title:"STECH GOAT AWARDS",text:text,url:window.location.href}).catch(()=>{});
-}
-
-// ---------------- COUNTDOWN ---------------------
-function updateCountdown(){
-  const end = new Date("2025-12-23T23:59:59");
-  const now = new Date();
-  const diff = end-now;
-  if(diff<=0){document.getElementById("countdown").innerText="Voting closed! Winner announced Dec 24!"; return;}
-  const days=Math.floor(diff/1000/60/60/24);
-  const hrs=Math.floor(diff/1000/60/60)%24;
-  const mins=Math.floor(diff/1000/60)%60;
-  const secs=Math.floor(diff/1000)%60;
-  document.getElementById("countdown").innerText=`Time Left: ${days}d ${hrs}h ${mins}m ${secs}s`;
-}
-setInterval(updateCountdown,1000);
-updateCountdown();
 </script>
+
 </body>
 </html>
