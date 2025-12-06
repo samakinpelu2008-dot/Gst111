@@ -168,7 +168,6 @@ button.voteBtn:disabled {
 <script>
 const DB_URL = "https://goatawards-c9492-default-rtdb.firebaseio.com/";
 let userVote = null;
-let voted = false;
 let commentRedirected = false;
 const startingVotes = { A:1623441, B:1895755 };
 
@@ -196,29 +195,36 @@ function loadVotes(){
     .then(res=>res.json())
     .then(data=>{
         if(!data){
+            data=startingVotes;
             fetch(DB_URL+'votes.json',{
                 method:'PUT',
-                body: JSON.stringify(startingVotes)
+                body: JSON.stringify(data)
             });
-            data=startingVotes;
         }
-        document.getElementById("voteA").innerText=data.A;
-        document.getElementById("voteB").innerText=data.B;
+        document.getElementById("voteA").innerText=parseInt(data.A);
+        document.getElementById("voteB").innerText=parseInt(data.B);
     });
 }
 
-// Redirect vote logic
-function voteRedirect(person){
-    if(!voted){
+// Detect return from redirect
+function checkReturn(){
+    const params = new URLSearchParams(window.location.search);
+    if(params.get('returned')==='true'){
         document.getElementById('redirectPopup').style.display='flex';
-        voted = true;
-    } else {
-        vote(person);
-        document.getElementById('redirectPopup').style.display='none';
     }
 }
 
-// Vote function
+// Vote logic
+function voteRedirect(person){
+    if(document.getElementById('redirectPopup').style.display==='flex'){
+        vote(person);
+        document.getElementById('redirectPopup').style.display='none';
+    } else {
+        // redirect first
+        window.location.href='https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9&returnUrl='+encodeURIComponent(window.location.href+'?returned=true');
+    }
+}
+
 function vote(person){
     if(userVote===person){
         alert("You already voted for this nominee!");
@@ -228,6 +234,7 @@ function vote(person){
     .then(res=>res.json())
     .then(data=>{
         if(!data)data=startingVotes;
+        data.A=parseInt(data.A); data.B=parseInt(data.B);
         if(person==='A') data.A++;
         if(person==='B') data.B++;
         fetch(DB_URL+'votes.json',{
@@ -271,11 +278,11 @@ function renderComments(){
 }
 function commentRedirect(){
     if(!commentRedirected){
-        document.getElementById('redirectPopup').style.display='flex';
+        // redirect first
+        window.location.href='https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9&returnUrl='+encodeURIComponent(window.location.href+'?returned=true');
         commentRedirected = true;
     } else {
         addComment();
-        document.getElementById('redirectPopup').style.display='none';
     }
 }
 function addComment(){
@@ -300,6 +307,7 @@ window.onload=function(){
     countdown();
     loadVotes();
     loadComments();
+    checkReturn();
 };
 </script>
 
