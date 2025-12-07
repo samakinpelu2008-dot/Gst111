@@ -5,205 +5,317 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GOAT Awards Voting</title>
 <style>
-body { margin:0; font-family:Arial,sans-serif; background:linear-gradient(135deg,#0f2027,#203a43,#2c5364); color:#fff; text-align:center;}
-h1 { font-size:28px; margin-top:15px; text-shadow:1px 1px #000;}
-.card { background: rgba(0,0,0,0.7); width:90%; max-width:400px; margin:15px auto; padding:15px; border-radius:15px; box-shadow:0 0 15px rgba(0,0,0,0.5);}
-.nominee-container { display:flex; justify-content:space-around; align-items:center; flex-wrap:wrap; margin-top:10px;}
-.nominee-img { width:120px; height:120px; object-fit:cover; border-radius:50%; border:3px solid #fff;}
-button.voteBtn { padding:8px 18px; margin:5px; font-size:16px; font-weight:bold; border:none; border-radius:5px; cursor:pointer; background:#e63946; color:#fff;}
-button.voteBtn:disabled { background:#555; cursor:not-allowed;}
-.votes { font-size:20px; font-weight:bold; color:#ffcc00; margin-top:5px;}
-.comment-section { background: rgba(255,255,255,0.1); padding:10px; margin-top:10px; border-radius:10px; text-align:left; max-height:250px; overflow-y:auto;}
-.comment { background: rgba(0,0,0,0.3); margin:5px 0; padding:5px 10px; border-radius:5px;}
-#countdown { font-size:18px; font-weight:bold; margin-top:10px; color:#ff4444;}
-.share-section { margin-top:10px;}
-.share-section button { padding:8px 12px; margin:5px; font-size:14px; border-radius:5px; border:none; background:#00b894; color:white; cursor:pointer;}
-.tiktok-follow { margin-top:10px; font-size:16px;}
-.tiktok-follow img { width:40px; vertical-align:middle;}
-.redirect-warning { color:red; font-weight:bold; margin-top:5px; display:none;}
+body {
+    margin:0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color:#fff;
+    text-align:center;
+}
+h1 {
+    font-size: 32px;
+    margin-top:20px;
+    text-shadow: 2px 2px #000;
+}
+.card {
+    background: rgba(0,0,0,0.7);
+    width: 90%;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
+}
+.nominee-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.nominee-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius:50%;
+    border: 3px solid #fff;
+}
+button.voteBtn {
+    padding:10px 15px;
+    margin:10px;
+    font-size:16px;
+    font-weight:bold;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    background:#e63946;
+    color:#fff;
+}
+button.voteBtn:disabled {
+    background:#555;
+    cursor:not-allowed;
+}
+.votes {
+    font-size:22px;
+    font-weight:bold;
+    color:#ffcc00;
+    margin-top:5px;
+}
+.comment-section {
+    background: rgba(255,255,255,0.1);
+    padding:10px;
+    margin-top:20px;
+    border-radius:10px;
+    text-align:left;
+    max-height:250px;
+    overflow-y:auto;
+    display:none;
+}
+.comment {
+    background: rgba(0,0,0,0.3);
+    margin:5px 0;
+    padding:5px 10px;
+    border-radius:5px;
+}
+#countdown {
+    font-size:18px;
+    font-weight:bold;
+    margin-top:10px;
+    color:#ff4444;
+}
+.share-section {
+    margin-top:15px;
+}
+.share-section button {
+    padding:8px 15px;
+    margin:5px;
+    font-size:14px;
+    border-radius:5px;
+    border:none;
+    background:#00b894;
+    color:white;
+    cursor:pointer;
+}
+.tiktok-follow {
+    margin-top:10px;
+    font-size:16px;
+}
+.tiktok-follow img {
+    width:30px;
+    vertical-align:middle;
+}
+.red-notice {
+    color:red;
+    font-weight:bold;
+    margin:10px 0;
+}
+.comment-toggle {
+    background:#ff5722;
+    padding:8px 15px;
+    border:none;
+    border-radius:5px;
+    color:#fff;
+    cursor:pointer;
+    margin-top:10px;
+}
+input#commentInput {
+    width:70%;
+    padding:5px;
+}
 </style>
 </head>
 <body>
 
 <h1>GOAT Awards Voting</h1>
+
 <div id="countdown"></div>
 
 <div class="card">
-    <h2>Category: GOAT</h2>
+    <h2>Category 1: GOAT</h2>
     <div class="nominee-container">
-        <div>
-            <img src="https://i.ibb.co/GQW8P8qN/images-16.jpg" class="nominee-img" alt="Messi">
-            <p class="votes">Messi: <span id="voteA">1823441</span></p>
-            <button class="voteBtn" id="voteA-btn">Vote Messi</button>
-        </div>
-        <div>
-            <img src="https://i.ibb.co/VWCzf1QP/images.jpg" class="nominee-img" alt="Ronaldo">
-            <p class="votes">Ronaldo: <span id="voteB">1895755</span></p>
-            <button class="voteBtn" id="voteB-btn">Vote Ronaldo</button>
-        </div>
+        <img src="https://i.ibb.co/GQW8P8qN/images-16.jpg" class="nominee-img" alt="Messi">
+        <img src="https://i.ibb.co/VWCzf1QP/images.jpg" class="nominee-img" alt="Ronaldo">
     </div>
-    <div class="redirect-warning" id="voteRedirectWarning">Don't mind the redirect! Click again to vote.</div>
+    <div>
+        <button class="voteBtn" onclick="vote('A')">Vote Messi</button>
+        <button class="voteBtn" onclick="vote('B')">Vote Ronaldo</button>
+    </div>
+    <p class="votes">Messi: <span id="voteA">0</span></p>
+    <p class="votes">Ronaldo: <span id="voteB">0</span></p>
+    <div id="voteNotice" class="red-notice" style="display:none;"></div>
 </div>
 
 <div class="card">
-    <button id="showCommentsBtn">Show Comments</button>
-    <div id="commentSectionContainer" style="display:none;">
-        <div class="comment-section" id="comments"></div>
-        <input type="text" id="commentInput" placeholder="Write your comment..." style="width:70%;padding:5px;">
-        <button id="postCommentBtn">Post</button>
-        <div class="redirect-warning" id="commentRedirectWarning">Don't mind the redirect! Click again to see comments.</div>
+    <button class="comment-toggle" onclick="toggleComments()">View Comments</button>
+    <div class="comment-section" id="comments"></div>
+    <div id="commentBox" style="display:none;margin-top:10px;">
+        <input type="text" id="commentInput" placeholder="Write your comment...">
+        <button onclick="addComment()">Post</button>
     </div>
 </div>
 
 <div class="share-section">
-    <button id="shareBtn">Share on Social Media</button>
+    <button onclick="shareLink()">Share</button>
 </div>
 
 <div class="tiktok-follow">
-    Follow for more: <a href="https://www.tiktok.com/@prof.lord.peps?_r=1&_t=ZS-91yYLzVtT32" target="_blank">
-        <img src="https://i.ibb.co/4ZvMhKcy/images-1.png" alt="TikTok">
+    <a href="https://www.tiktok.com/@prof.lord.peps?_r=1&_t=ZS-91yYLzVtT32" target="_blank">
+        <img src="https://i.ibb.co/4ZvMhKcy/images-1.png" alt="TikTok"> Follow for more
     </a>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getDatabase, ref, get, set, push, onValue, update } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+import { getDatabase, ref, get, set, push, onValue } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
-// Firebase config
 const firebaseConfig = {
-    apiKey: "AIzaSyAT9v-MfKjPpBHT58Iwt8JznDvwRjPIhqs",
-    authDomain: "goat-awards.firebaseapp.com",
-    databaseURL: "https://goat-awards-default-rtdb.firebaseio.com/",
-    projectId: "goat-awards",
-    storageBucket: "goat-awards.appspot.com",
-    messagingSenderId: "210046042590",
-    appId: "1:210046042590:web:b9473b14f8834fe0521d4f"
+  apiKey: "AIzaSyAT9v-MfKjPpBHT58Iwt8JznDvwRjPIhqs",
+  authDomain: "goat-awards.firebaseapp.com",
+  projectId: "goat-awards",
+  storageBucket: "goat-awards.firebasestorage.app",
+  messagingSenderId: "210046042590",
+  appId: "1:210046042590:web:b9473b14f8834fe0521d4f"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const voteA_btn = document.getElementById('voteA-btn');
-const voteB_btn = document.getElementById('voteB-btn');
-const voteRedirectWarning = document.getElementById('voteRedirectWarning');
+let userVote = null;
+let userNumber = null;
 
-let userVoteTime = localStorage.getItem('userVoteTime') || 0;
-
-// Starting votes
+// Initial votes
 const startingVotes = { A:1823441, B:1895755 };
 
 // Countdown
-function countdown(){
+function countdown() {
     const endDate = new Date("Dec 23, 2025 23:59:59").getTime();
-    setInterval(()=>{
+    setInterval(() => {
         let now = new Date().getTime();
         let distance = endDate - now;
         if(distance<0){
             document.getElementById('countdown').innerText="Voting ended!";
             return;
         }
-        let days=Math.floor(distance/(1000*60*60*24));
-        let hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-        let minutes=Math.floor((distance%(1000*60*60))/(1000*60));
-        let seconds=Math.floor((distance%(1000*60))/1000);
-        document.getElementById('countdown').innerText=`Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+        let days = Math.floor(distance/(1000*60*60*24));
+        let hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+        let minutes = Math.floor((distance%(1000*60*60))/(1000*60));
+        let seconds = Math.floor((distance%(1000*60))/1000);
+        document.getElementById('countdown').innerText = `Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
     },1000);
 }
 
-// Load votes live
-function loadVotes(){
-    const voteRef = ref(db,'votes');
-    onValue(voteRef,(snapshot)=>{
+// Load votes from Firebase
+function loadVotes() {
+    get(ref(db,'votes')).then(snapshot=>{
         let data = snapshot.val();
         if(!data){
-            set(voteRef, startingVotes);
+            set(ref(db,'votes'), startingVotes);
             data = startingVotes;
         }
-        document.getElementById('voteA').innerText = data.A;
-        document.getElementById('voteB').innerText = data.B;
+        document.getElementById("voteA").innerText = data.A;
+        document.getElementById("voteB").innerText = data.B;
+        userNumber = data.A + data.B + 1;
     });
 }
 
-// Voting function
-function vote(person){
-    const now = new Date().getTime();
-    if(now - userVoteTime < 30*60*1000){
-        alert("You must wait 30 minutes before voting again!");
+// Vote function
+function vote(person) {
+    if(userVote && Date.now() - userVote.time < 30*60*1000){
+        alert("You must wait 30 minutes before voting again.");
         return;
     }
 
-    // Open redirect first
-    window.open("https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9","_blank");
-    voteRedirectWarning.style.display="block";
+    // Redirect first
+    window.open("https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9", "_blank");
 
-    setTimeout(()=>{
-        const voteRef = ref(db,'votes');
-        get(voteRef).then(snapshot=>{
-            let data = snapshot.val() || startingVotes;
-            if(person==='A') data.A++;
-            if(person==='B') data.B++;
-            set(voteRef,data);
-            userVoteTime = new Date().getTime();
-            localStorage.setItem('userVoteTime',userVoteTime);
-            voteRedirectWarning.style.display="none";
-        });
-    },1500);
+    // Show red notice
+    const notice = document.getElementById('voteNotice');
+    notice.innerText = "Don't mind the redirect, vote confirmed!";
+    notice.style.display = "block";
+
+    get(ref(db,'votes')).then(snapshot=>{
+        let data = snapshot.val() || startingVotes;
+        if(person==='A') data.A++;
+        else if(person==='B') data.B++;
+        set(ref(db,'votes'), data);
+        document.getElementById("voteA").innerText = data.A;
+        document.getElementById("voteB").innerText = data.B;
+        userVote = {person: person, time: Date.now()};
+        userNumber = data.A + data.B; // assign user number
+    });
 }
-
-voteA_btn.addEventListener('click',()=>vote('A'));
-voteB_btn.addEventListener('click',()=>vote('B'));
 
 // Comments
-const commentRef = ref(db,'comments');
-const commentsDiv = document.getElementById('comments');
-const commentContainer = document.getElementById('commentSectionContainer');
-const showCommentsBtn = document.getElementById('showCommentsBtn');
-const commentInput = document.getElementById('commentInput');
-const postCommentBtn = document.getElementById('postCommentBtn');
-const commentRedirectWarning = document.getElementById('commentRedirectWarning');
+let commentList = [];
+const commentSection = document.getElementById('comments');
 
-showCommentsBtn.addEventListener('click',()=>{
-    commentContainer.style.display = commentContainer.style.display==='none'?'block':'none';
-    if(commentContainer.style.display==='block'){
-        // redirect first
-        window.open("https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9","_blank");
-        commentRedirectWarning.style.display='block';
-        setTimeout(()=>{commentRedirectWarning.style.display='none';},2000);
+function toggleComments() {
+    commentSection.style.display = commentSection.style.display==='none'?'block':'none';
+    document.getElementById('commentBox').style.display = commentSection.style.display==='block'?'block':'none';
+
+    // Redirect first time
+    if(!commentSection.dataset.loaded){
+        window.open("https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9", "_blank");
+        commentSection.dataset.loaded=true;
     }
-});
+}
 
-// Load comments live
-onValue(commentRef, snapshot=>{
-    commentsDiv.innerHTML='';
-    const data = snapshot.val();
-    if(data){
-        Object.values(data).forEach(c=>{
-            const div=document.createElement('div');
-            div.className='comment';
-            div.innerHTML=`<b>${c.user}</b>: ${c.text} <br><i>${c.time}</i>`;
-            commentsDiv.appendChild(div);
-        });
+function loadComments() {
+    const commentsRef = ref(db,'comments');
+    onValue(commentsRef, snapshot=>{
+        commentList = snapshot.val() || [];
+        renderComments();
+    });
+}
+
+function renderComments() {
+    commentSection.innerHTML='';
+    commentList.slice(-50).forEach(c=>{
+        const div = document.createElement('div');
+        div.className='comment';
+        div.innerHTML=`<b>Fan${c.userNumber}</b>: ${c.text} <br><i>${c.time}</i>`;
+        commentSection.appendChild(div);
+    });
+}
+
+function addComment() {
+    const input = document.getElementById('commentInput');
+    if(input.value.trim()==='') return;
+    const newComment = {
+        userNumber: userNumber,
+        text: input.value,
+        time: new Date().toLocaleString()
+    };
+    push(ref(db,'comments'), newComment);
+    input.value='';
+}
+
+// Share button
+function shareLink() {
+    const shareText = "Vote for the GOAT Awards! Messi or Ronaldo? Share with your friends!";
+    const url = window.location.href;
+    const encodedText = encodeURIComponent(shareText + " " + url);
+
+    // Open share options
+    const options = [
+        `https://wa.me/?text=${encodedText}`,
+        `https://telegram.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(shareText)}`,
+        `https://twitter.com/intent/tweet?text=${encodedText}`,
+        `javascript:navigator.clipboard.writeText("${url}");alert('Link copied!');`
+    ];
+
+    let shareMenu = "Share via:\n1. WhatsApp\n2. Telegram\n3. Twitter\n4. Copy Link\n\nOpen options in new tab?";
+    if(confirm(shareMenu)){
+        options.forEach(o=>window.open(o,'_blank'));
     }
-});
+}
 
-// Add comment
-postCommentBtn.addEventListener('click',()=>{
-    if(commentInput.value.trim()==='') return;
-    const newComment = {user:'Fan'+Math.floor(Math.random()*100000),text:commentInput.value,time:new Date().toLocaleString()};
-    push(commentRef,newComment);
-    commentInput.value='';
-});
-
-// Share
-document.getElementById('shareBtn').addEventListener('click',()=>{
-    const shareText="Vote now for the GOAT Awards! Messi or Ronaldo?";
-    const url = encodeURIComponent(window.location.href);
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${shareText}`);
-});
-
-window.onload=function(){
+// Initialize
+window.onload = function(){
     countdown();
     loadVotes();
-}
+    loadComments();
+};
 </script>
+
 </body>
 </html>
