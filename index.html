@@ -3,283 +3,259 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT Awards 2024</title>
+<title>GOAT Awards Voting</title>
 <style>
-  body {
+body {
     margin:0;
-    padding:0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg,#0a0a0a,#2b0000);
-    color:white;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color:#fff;
     text-align:center;
-  }
-  h1{margin-top:20px;font-size:45px;text-shadow:2px 2px 10px red;}
-  #countdown{margin-top:20px;font-size:24px;color:yellow;}
-
-  .players-row {
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:20px;
-    margin-top:30px;
-  }
-
-  .player-box{
-      background: rgba(255,255,255,0.1);
-      padding:20px;
-      border-radius:15px;
-      flex:1 1 300px;
-      max-width:350px;
-      backdrop-filter: blur(5px);
-      position:relative;
-      text-align:center;
-  }
-  .player-box img{
-      width:200px;
-      border-radius:15px;
-  }
-  .score{
-      font-size:40px;
-      font-weight:bold;
-      margin:10px 0;
-      color:red;
-      transition: transform 0.3s ease;
-  }
-  button{
-      padding:10px 20px;
-      border:none;
-      border-radius:8px;
-      background:red;
-      color:white;
-      font-size:16px;
-      cursor:pointer;
-      margin-top:10px;
-  }
-  button:hover{background:darkred;}
-
-  #commentSection{
-    margin-top:40px;
-    background:rgba(0,0,0,0.4);
-    padding:20px;
-    border-radius:12px;
-    display:none;
-  }
-  .comment{
-      background: rgba(255,255,255,0.1);
-      padding: 10px;
-      border-radius: 10px;
-      margin: 10px 0;
-      text-align:left;
-  }
-  .share-container{margin-top:30px;}
-  .share-options{display:none;margin-top:10px;}
-  .share-options button{margin:5px;}
-  .tiktok-follow{
+}
+h1 {
+    font-size: 36px;
     margin-top:20px;
-    font-size:18px;
-    background:linear-gradient(90deg,#ff0055,#ffcc00);
+    text-shadow: 2px 2px #000;
+}
+.card {
+    background: rgba(0,0,0,0.7);
+    width: 320px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
+}
+.nominee-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius:50%;
+    margin: 10px;
+    border: 3px solid #fff;
+}
+button.voteBtn {
     padding:10px 20px;
-    border-radius:12px;
-    display:inline-block;
-    cursor:pointer;
-    color:black;
+    margin:10px;
+    font-size:16px;
     font-weight:bold;
-  }
-  .notice{color:yellow;font-weight:bold;margin-top:10px;}
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    background:#e63946;
+    color:#fff;
+}
+button.voteBtn:disabled {
+    background:#555;
+    cursor:not-allowed;
+}
+.votes {
+    font-size:22px;
+    font-weight:bold;
+    color:#ffcc00;
+    margin-top:5px;
+    animation: pop 0.5s;
+}
+@keyframes pop {
+    0% {transform: scale(1);}
+    50% {transform: scale(1.3);}
+    100% {transform: scale(1);}
+}
+.comment-section {
+    background: rgba(255,255,255,0.1);
+    padding:10px;
+    margin-top:20px;
+    border-radius:10px;
+    text-align:left;
+    max-height:250px;
+    overflow-y:auto;
+}
+.comment {
+    background: rgba(0,0,0,0.3);
+    margin:5px 0;
+    padding:5px 10px;
+    border-radius:5px;
+}
+#countdown {
+    font-size:20px;
+    font-weight:bold;
+    margin-top:10px;
+    color:#ff4444;
+}
+.share-section {
+    margin-top:15px;
+}
+.share-section button {
+    padding:8px 15px;
+    margin:5px;
+    font-size:14px;
+    border-radius:5px;
+    border:none;
+    background:#00b894;
+    color:white;
+    cursor:pointer;
+}
+.tiktok-follow {
+    margin-top:10px;
+    font-size:16px;
+}
+.tiktok-follow a {
+    color:#ffe400;
+    text-decoration:none;
+    font-weight:bold;
+}
 </style>
 </head>
 <body>
 
-<h1>GOAT Awards 2024</h1>
+<h1>GOAT Awards Voting</h1>
+
 <div id="countdown"></div>
 
-<div class="players-row">
-    <div class="player-box">
-        <h2>Ronaldo</h2>
-        <img src="https://i.ibb.co/VWCzf1QP/images.jpg" alt="Ronaldo">
-        <div id="ronaldo-score" class="score">1,895,755</div>
-        <button onclick="startVote('ronaldo')">Vote Ronaldo</button>
+<div class="card">
+    <h2>Category 1: GOAT</h2>
+    <div>
+        <img src="https://i.ibb.co/GQW8P8qN/images-16.jpg" class="nominee-img" alt="Messi">
+        <img src="https://i.ibb.co/VWCzf1QP/images.jpg" class="nominee-img" alt="Ronaldo">
     </div>
-
-    <div class="player-box">
-        <h2>Messi</h2>
-        <img src="https://i.ibb.co/GQW8P8qN/images-16.jpg" alt="Messi">
-        <div id="messi-score" class="score">1,823,441</div>
-        <button onclick="startVote('messi')">Vote Messi</button>
+    <div>
+        <button class="voteBtn" onclick="vote('A')">Vote Messi</button>
+        <button class="voteBtn" onclick="vote('B')">Vote Ronaldo</button>
     </div>
+    <p class="votes">Messi: <span id="voteA">0</span></p>
+    <p class="votes">Ronaldo: <span id="voteB">0</span></p>
 </div>
 
-<div id="commentSection" class="container">
-    <h2>Comments</h2>
-    <input id="commentInput" type="text" placeholder="Write a comment..." style="width:80%;padding:10px;border-radius:8px;">
-    <button onclick="postComment()">Post</button>
-    <div id="allComments"></div>
-    <button onclick="loadMoreComments()" style="margin-top:10px;">View More Comments</button>
+<div class="card">
+    <h3>Comments</h3>
+    <div class="comment-section" id="comments"></div>
+    <input type="text" id="commentInput" placeholder="Write your comment..." style="width:70%;padding:5px;">
+    <button onclick="addComment()">Post</button>
 </div>
 
-<div class="share-container">
-    <button onclick="toggleShare()">Share & Follow</button>
-    <div class="share-options" id="shareOptions">
-        <button onclick="share('facebook')">Facebook</button>
-        <button onclick="share('twitter')">Twitter</button>
-        <button onclick="share('whatsapp')">WhatsApp</button>
-        <div class="tiktok-follow" onclick="share('tiktok')">Follow me on TikTok for more!</div>
-    </div>
-    <div class="notice">Important: You may experience a redirect before voting—click again and it will work!</div>
+<div class="share-section">
+    <button onclick="shareLink()">Share on Social Media</button>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getDatabase, ref, get, set, push, update, onValue } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+<div class="tiktok-follow">
+    Follow for more: <a href="https://www.tiktok.com/@prof.lord.peps?_r=1&_t=ZS-91yYLzVtT32" target="_blank">@prof.lord.peps</a>
+</div>
 
-const firebaseConfig = {
-    apiKey: "AIzaSyAT9v-MfKjPpBHT58Iwt8JznDvwRjPIhqs",
-    authDomain: "goat-awards.firebaseapp.com",
-    databaseURL: "https://goat-awards-default-rtdb.firebaseio.com/",
-    projectId: "goat-awards",
-    storageBucket: "goat-awards.firebasestorage.app",
-    messagingSenderId: "210046042590",
-    appId: "1:210046042590:web:b9473b14f8834fe0521d4f"
-};
+<script>
+const DB_URL = "https://goatawards-c9492-default-rtdb.firebaseio.com/";
+let userVote = null;
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-// Vote logic
-let voted = sessionStorage.getItem('voted') || null;
-const redirectLink = "https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9";
-
-window.startVote = function(player){
-    if(!voted){
-        window.open(redirectLink,"_blank");
-        alert("Redirecting. Click again after returning to vote!");
-        voted = player + "_redirected";
-        sessionStorage.setItem('voted',voted);
-    } else if(voted && voted.includes("_redirected")){
-        vote(player);
-        voted = player;
-        sessionStorage.setItem('voted',voted);
-        alert("Your vote has been counted for "+player+"!");
-    } else { alert("You have already voted!"); }
-};
-
-function vote(player){
-    const playerRef = ref(db,"players/"+player);
-    get(playerRef).then(snap=>{
-        let score = snap.val()??(player==="messi"?1823441:1895755);
-        update(ref(db,"players"),{[player]:score+1});
-    });
-}
-
-// Load votes live
-function loadScores(){
-    onValue(ref(db,"players"),snap=>{
-        let data = snap.val() || {};
-        let messi = data.messi ?? 1823441;
-        let ronaldo = data.ronaldo ?? 1895755;
-        document.getElementById("messi-score").innerText = messi.toLocaleString();
-        document.getElementById("ronaldo-score").innerText = ronaldo.toLocaleString();
-        animateScore("messi-score");
-        animateScore("ronaldo-score");
-    });
-}
-loadScores();
-
-function animateScore(id){
-    const el=document.getElementById(id);
-    el.style.transform="scale(1.3)";
-    setTimeout(()=>el.style.transform="scale(1)",200);
-}
+// Start votes
+const startingVotes = { A:1623441, B:1895755 };
 
 // Countdown
-function countdown(){
-    const endDate = new Date("Dec 23, 2024 23:59:59").getTime();
-    setInterval(()=>{
-        const now = new Date().getTime();
-        let diff = endDate-now;
-        if(diff<0){diff=0;}
-        let days=Math.floor(diff/(1000*60*60*24));
-        let hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-        let minutes=Math.floor((diff%(1000*60*60))/(1000*60));
-        let seconds=Math.floor((diff%(1000*60))/1000);
-        document.getElementById("countdown").innerText=`Voting ends in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+function countdown() {
+    const endDate = new Date("Dec 23, 2025 23:59:59").getTime();
+    setInterval(() => {
+        let now = new Date().getTime();
+        let distance = endDate - now;
+        if(distance<0){
+            document.getElementById('countdown').innerText="Voting ended!";
+            return;
+        }
+        let days = Math.floor(distance/(1000*60*60*24));
+        let hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+        let minutes = Math.floor((distance%(1000*60*60))/(1000*60));
+        let seconds = Math.floor((distance%(1000*60))/1000);
+        document.getElementById('countdown').innerText = `Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
     },1000);
 }
-countdown();
 
-// Comments
-let fakeUsers=[], fakeComments=[], commentIndex=0;
-for(let i=1;i<=50;i++) fakeUsers.push("User"+Math.floor(Math.random()*3000000));
-fakeComments=[
-    "CR7 forever! ⚽🔥","Messi is the real GOAT! 🐐","Does Ronaldo even have a World Cup? 😂","Messi too short 🙄",
-    "Ronaldo haters 😎","Messi deserves it more","Ronaldo all day! 💪","Messi magic ✨","Ronaldo fitness is insane",
-    "Messi no chance? 🤔","Up Ronaldo, hands up! 🙌","Messi is the king 👑","This is crazy! 😱","I love both but Ronaldo 💯",
-    "Messi haters 🤷‍♂️","Ronaldo unstoppable","Messi skills unmatched","Ronaldo fans rise 🔥","Messi vs Ronaldo debate 🗣️",
-    "Who is your GOAT? 🤔","Ronaldo is life ❤️","Messi is genius 🐐","CR7 can never lose","Messi unbeatable ⚡",
-    "Ronaldo hat trick king","Messi dribble master","Fans shouting CR7","Messi all the way","Ronaldo wins hearts 💖",
-    "Messi GOAT energy","CR7 skills insane","Messi top scorer","Ronaldo goals 💥","Messi assists everywhere",
-    "CR7 free kick legend","Messi Messi Messi","Ronaldo vs Messi all debate","Messi magic moment","Ronaldo unstoppable",
-    "Messi skill vs CR7","Ronaldo fame worldwide","Messi short but mighty","Ronaldo Ronaldo Ronaldo","Messi fan club 🐐",
-    "CR7 haters beware","Messi lover 💖","Ronaldo vs Messi fight","Messi number 10 👑","CR7 strong 💪","Messi fast ⚡"
-];
-
-function randomDate(start,end){return new Date(start.getTime() + Math.random()*(end.getTime()-start.getTime()));}
-
-function loadFakeComments(count){
-    const container=document.getElementById("allComments");
-    for(let i=0;i<count;i++){
-        if(commentIndex>=fakeComments.length) commentIndex=0;
-        let user=fakeUsers[Math.floor(Math.random()*fakeUsers.length)];
-        let text=fakeComments[Math.floor(Math.random()*fakeComments.length)];
-        let date=randomDate(new Date(2024,10,23),new Date()).toLocaleString();
-        container.innerHTML=`<div class="comment"><b>${user} - ${date}</b><br>${text}</div>`+container.innerHTML;
-        commentIndex++;
-    }
+// Load votes
+function loadVotes(){
+    fetch(DB_URL+'votes.json')
+    .then(res=>res.json())
+    .then(data=>{
+        if(!data){
+            // First load, set starting votes
+            fetch(DB_URL+'votes.json',{
+                method:'PUT',
+                body: JSON.stringify(startingVotes)
+            });
+            data = startingVotes;
+        }
+        document.getElementById("voteA").innerText=data.A;
+        document.getElementById("voteB").innerText=data.B;
+    });
 }
 
-window.loadMoreComments=function(){loadFakeComments(20);};
-
-window.postComment=function(){
-    const text=document.getElementById("commentInput").value.trim();
-    if(!text) return;
-    const commentRef=push(ref(db,"comments"));
-    set(commentRef,{text:text,time:Date.now()});
-    document.getElementById("commentInput").value="";
-};
-
-// Load real comments
-onValue(ref(db,"comments"),snap=>{
-    let container=document.getElementById("allComments");
-    let data=snap.val()||{};
-    let keys=Object.keys(data).reverse();
-    keys.forEach(key=>{
-        let c=data[key];
-        let date=new Date(c.time).toLocaleString();
-        container.innerHTML=`<div class="comment"><b>RealUser - ${date}</b><br>${c.text}</div>`+container.innerHTML;
+// Vote function
+function vote(person){
+    if(userVote===person){
+        alert("You already voted for this nominee!");
+        return;
+    }
+    fetch(DB_URL+'votes.json')
+    .then(res=>res.json())
+    .then(data=>{
+        if(!data)data=startingVotes;
+        if(person==='A') data.A++;
+        if(person==='B') data.B++;
+        fetch(DB_URL+'votes.json',{
+            method:'PUT',
+            body: JSON.stringify(data)
+        }).then(()=>{
+            loadVotes();
+            userVote=person;
+        });
     });
-});
+}
 
-// Auto add new fake comment every minute
-setInterval(()=>{loadFakeComments(1);},60000);
+// Comments
+let commentList=[];
+function loadComments(){
+    fetch(DB_URL+'comments.json')
+    .then(res=>res.json())
+    .then(data=>{
+        if(!data){
+            commentList=[
+                {user:'Fan123',text:'CR7 is the real GOAT! 🐐',time:'Nov 23 12:15'},
+                {user:'MessiFan',text:'Messi all day ⚽🔥',time:'Nov 23 13:22'},
+                {user:'SoccerKing',text:'Ronaldo has no World Cup lol',time:'Nov 23 14:10'}
+            ];
+            fetch(DB_URL+'comments.json',{method:'PUT',body:JSON.stringify(commentList)});
+        }else{
+            commentList=data;
+        }
+        renderComments();
+    });
+}
+function renderComments(){
+    const cDiv=document.getElementById('comments');
+    cDiv.innerHTML='';
+    commentList.forEach(c=>{
+        const div=document.createElement('div');
+        div.className='comment';
+        div.innerHTML=`<b>${c.user}</b>: ${c.text} <br><i>${c.time}</i>`;
+        cDiv.appendChild(div);
+    });
+}
+function addComment(){
+    const input=document.getElementById('commentInput');
+    if(input.value.trim()==='') return;
+    const newComment={user:'You',text:input.value,time:new Date().toLocaleString()};
+    commentList.push(newComment);
+    fetch(DB_URL+'comments.json',{method:'PUT',body:JSON.stringify(commentList)})
+    .then(()=>{
+        renderComments();
+        input.value='';
+    });
+}
 
-// Share toggle
-window.toggleShare=function(){
-    const el=document.getElementById("shareOptions");
-    el.style.display = el.style.display==="none"?"block":"none";
-};
+// Share
+function shareLink(){
+    const shareText=`Vote now for the GOAT Awards! ⚽🔥 Messi or Ronaldo? Click here and support your GOAT!`;
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`);
+}
 
-// Share buttons
-window.share=function(platform){
-    const url=window.location.href;
-    if(platform==="facebook") window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`,"_blank");
-    else if(platform==="twitter") window.open(`https://twitter.com/intent/tweet?url=${url}&text=Vote now for your GOAT!`,"_blank");
-    else if(platform==="whatsapp") window.open(`https://api.whatsapp.com/send?text=Vote now for your GOAT! ${url}`,"_blank");
-    else if(platform==="tiktok") window.open(`https://www.tiktok.com/@prof.lord.peps?_r=1&_t=ZS-91yYLzVtT32`,"_blank");
-};
-
-// Show comments section after redirect
-window.showCommentsSection=function(){
-    document.getElementById("commentSection").style.display="block";
+window.onload=function(){
+    countdown();
+    loadVotes();
+    loadComments();
 };
 </script>
 
