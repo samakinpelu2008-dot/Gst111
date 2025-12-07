@@ -3,59 +3,65 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT Awards 2024</title>
+<title>GOAT Awards 2025</title>
 <style>
-    body {
-        margin:0;
-        padding:0;
-        font-family: Arial,sans-serif;
-        background: linear-gradient(135deg,#1b1b1b,#3b0000);
-        color:white;
-        text-align:center;
-    }
-    h1{margin-top:20px;font-size:45px;text-shadow:2px 2px 10px red;}
-    .container{width:95%;max-width:700px;margin:auto;margin-top:30px;}
-    .player-box{
-        background: rgba(255,255,255,0.1);
-        padding:20px;
-        margin:15px 0;
-        border-radius:15px;
-        backdrop-filter: blur(5px);
-        position:relative;
-    }
-    .score{font-size:60px;font-weight:bold;margin:10px 0;transition: transform 0.2s ease;}
-    .fire{font-size:30px;margin-top:5px;display:none;}
-    button{padding:12px 25px;border:none;border-radius:8px;background:red;color:white;font-size:18px;cursor:pointer;margin-top:10px;}
-    button:hover{background:darkred;}
-    #commentSection{margin-top:40px;background:rgba(0,0,0,0.4);padding:20px;border-radius:12px;}
-    .comment{
-        background: rgba(255,255,255,0.1);
-        padding: 10px;
-        border-radius: 10px;
-        margin: 10px 0;
-        text-align:left;
-    }
-    .share-buttons{margin-top:30px;}
-    .share-buttons button{margin:5px;}
-    .notice{color:yellow;font-weight:bold;margin-top:10px;}
+  body {
+    margin:0;
+    padding:0;
+    font-family: Arial,sans-serif;
+    background: linear-gradient(135deg,#0a0a0a,#2b0000);
+    color:white;
+    text-align:center;
+  }
+  h1{margin-top:20px;font-size:45px;text-shadow:2px 2px 10px red;}
+  .container{width:95%;max-width:700px;margin:auto;margin-top:30px;}
+  .player-box{
+      background: rgba(255,255,255,0.1);
+      padding:20px;
+      margin:15px 0;
+      border-radius:15px;
+      backdrop-filter: blur(5px);
+      position:relative;
+  }
+  .player-box img{
+      max-width:100%;
+      border-radius:15px;
+  }
+  .score{font-size:50px;font-weight:bold;margin:10px 0;color:red;transition:transform 0.3s ease;}
+  button{padding:12px 25px;border:none;border-radius:8px;background:red;color:white;font-size:18px;cursor:pointer;margin-top:10px;}
+  button:hover{background:darkred;}
+  #countdown{margin-top:20px;font-size:24px;color:yellow;}
+  #commentSection{margin-top:40px;background:rgba(0,0,0,0.4);padding:20px;border-radius:12px;display:none;}
+  .comment{
+      background: rgba(255,255,255,0.1);
+      padding: 10px;
+      border-radius: 10px;
+      margin: 10px 0;
+      text-align:left;
+  }
+  .share-buttons{margin-top:30px;}
+  .share-buttons button{margin:5px;}
+  .notice{color:yellow;font-weight:bold;margin-top:10px;}
 </style>
 </head>
 <body>
 
 <h1>GOAT Awards 2024</h1>
 
+<div id="countdown"></div>
+
 <div class="container">
     <div class="player-box">
         <h2>Ronaldo</h2>
-        <div id="ronaldo-score" class="score">0</div>
-        <div id="ronaldo-fire" class="fire">🔥🔥🔥</div>
+        <img src="https://i.ibb.co/VWCzf1QP/images.jpg" alt="Ronaldo">
+        <div id="ronaldo-score" class="score">1,895,755</div>
         <button onclick="startVote('ronaldo')">Vote Ronaldo</button>
     </div>
 
     <div class="player-box">
         <h2>Messi</h2>
-        <div id="messi-score" class="score">0</div>
-        <div id="messi-fire" class="fire">🔥🔥🔥</div>
+        <img src="https://i.ibb.co/GQW8P8qN/images-16.jpg" alt="Messi">
+        <div id="messi-score" class="score">1,823,441</div>
         <button onclick="startVote('messi')">Vote Messi</button>
     </div>
 </div>
@@ -69,12 +75,12 @@
 </div>
 
 <div class="share-buttons container">
-    <h2>Share & Invite Friends</h2>
+    <h2>Share & Follow</h2>
     <button onclick="share('facebook')">Facebook</button>
     <button onclick="share('twitter')">Twitter</button>
     <button onclick="share('whatsapp')">WhatsApp</button>
     <button onclick="share('tiktok')">TikTok Follow</button>
-    <div class="notice">Important: You may experience a redirect when voting. Click again and it will work!</div>
+    <div class="notice">Important: You may experience a redirect before voting—click again and it will work!</div>
 </div>
 
 <script type="module">
@@ -94,18 +100,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Prevent multiple votes per session
+// Vote logic
 let voted = sessionStorage.getItem('voted') || null;
-
-// Redirect link before actual voting
 const redirectLink = "https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9";
-
-function showRedirectNotice(){ alert("You are being redirected. Click again to vote!"); }
 
 window.startVote = function(player){
     if(!voted){
         window.open(redirectLink,"_blank");
-        showRedirectNotice();
+        alert("Redirecting. Click again after returning to vote!");
         voted = player + "_redirected";
         sessionStorage.setItem('voted',voted);
     } else if(voted && voted.includes("_redirected")){
@@ -116,27 +118,6 @@ window.startVote = function(player){
     } else { alert("You have already voted!"); }
 };
 
-// LIVE SCORES
-function loadScores(){
-    onValue(ref(db,"players"),snap=>{
-        let data = snap.val() || {};
-        let messi = data.messi ?? 0;
-        let ronaldo = data.ronaldo ?? 0;
-
-        document.getElementById("messi-score").innerText = messi;
-        document.getElementById("ronaldo-score").innerText = ronaldo;
-
-        animateScore("messi-score");
-        animateScore("ronaldo-score");
-
-        document.getElementById("messi-fire").style.display="none";
-        document.getElementById("ronaldo-fire").style.display="none";
-        if(messi>ronaldo) document.getElementById("messi-fire").style.display="block";
-        else if(ronaldo>messi) document.getElementById("ronaldo-fire").style.display="block";
-    });
-}
-loadScores();
-function animateScore(id){const el=document.getElementById(id);el.style.transform="scale(1.3)";setTimeout(()=>el.style.transform="scale(1)",200);}
 function vote(player){
     const playerRef = ref(db,"players/"+player);
     get(playerRef).then(snap=>{
@@ -145,41 +126,75 @@ function vote(player){
     });
 }
 
-// FAKE COMMENTS
-let fakeUsers = [];
-for(let i=1;i<=350;i++) fakeUsers.push("User"+Math.floor(Math.random()*3000000));
+// Load votes live
+function loadScores(){
+    onValue(ref(db,"players"),snap=>{
+        let data = snap.val() || {};
+        let messi = data.messi ?? 1823441;
+        let ronaldo = data.ronaldo ?? 1895755;
+        document.getElementById("messi-score").innerText = messi.toLocaleString();
+        document.getElementById("ronaldo-score").innerText = ronaldo.toLocaleString();
+        animateScore("messi-score");
+        animateScore("ronaldo-score");
+    });
+}
+loadScores();
 
-let fakeComments = [
-    "CR7 forever! ⚽🔥","Messi is the real GOAT! 🐐","Does Ronaldo even have a World Cup? 😂","Messi too short 🙄","Ronaldo haters 😎","Messi deserves it more","Ronaldo all day! 💪","Messi magic ✨","Ronaldo fitness is insane","Messi no chance? 🤔",
-    "Up Ronaldo, hands up! 🙌","Messi is the king 👑","This is crazy! 😱","I love both but Ronaldo 💯","Messi haters 🤷‍♂️","Ronaldo unstoppable","Messi skills unmatched","Ronaldo fans rise 🔥","Messi vs Ronaldo debate 🗣️","Who is your GOAT? 🤔"
-];
-
-let commentIndex = 0;
-let loadedComments = 20;
-
-function randomDate(start,end){
-    return new Date(start.getTime() + Math.random()*(end.getTime()-start.getTime()));
+function animateScore(id){
+    const el=document.getElementById(id);
+    el.style.transform="scale(1.3)";
+    setTimeout(()=>el.style.transform="scale(1)",200);
 }
 
+// Countdown
+function countdown(){
+    const endDate = new Date("Dec 23, 2024 23:59:59").getTime();
+    setInterval(()=>{
+        const now = new Date().getTime();
+        let diff = endDate-now;
+        if(diff<0){diff=0;}
+        let days=Math.floor(diff/(1000*60*60*24));
+        let hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+        let minutes=Math.floor((diff%(1000*60*60))/(1000*60));
+        let seconds=Math.floor((diff%(1000*60))/1000);
+        document.getElementById("countdown").innerText=`Voting ends in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+    },1000);
+}
+countdown();
+
+// Comments
+let fakeUsers=[], fakeComments=[], commentIndex=0, loadedComments=20;
+for(let i=1;i<=50;i++) fakeUsers.push("User"+Math.floor(Math.random()*3000000));
+fakeComments=[
+    "CR7 forever! ⚽🔥","Messi is the real GOAT! 🐐","Does Ronaldo even have a World Cup? 😂","Messi too short 🙄",
+    "Ronaldo haters 😎","Messi deserves it more","Ronaldo all day! 💪","Messi magic ✨","Ronaldo fitness is insane",
+    "Messi no chance? 🤔","Up Ronaldo, hands up! 🙌","Messi is the king 👑","This is crazy! 😱","I love both but Ronaldo 💯",
+    "Messi haters 🤷‍♂️","Ronaldo unstoppable","Messi skills unmatched","Ronaldo fans rise 🔥","Messi vs Ronaldo debate 🗣️",
+    "Who is your GOAT? 🤔","Ronaldo is life ❤️","Messi is genius 🐐","CR7 can never lose","Messi unbeatable ⚡",
+    "Ronaldo hat trick king","Messi dribble master","Fans shouting CR7","Messi all the way","Ronaldo wins hearts 💖",
+    "Messi GOAT energy","CR7 skills insane","Messi top scorer","Ronaldo goals 💥","Messi assists everywhere",
+    "CR7 free kick legend","Messi Messi Messi","Ronaldo vs Messi all debate","Messi magic moment","Ronaldo unstoppable",
+    "Messi skill vs CR7","Ronaldo fame worldwide","Messi short but mighty","Ronaldo Ronaldo Ronaldo","Messi fan club 🐐",
+    "CR7 haters beware","Messi lover 💖","Ronaldo vs Messi fight","Messi number 10 👑","CR7 strong 💪","Messi fast ⚡"
+];
+
+function randomDate(start,end){return new Date(start.getTime() + Math.random()*(end.getTime()-start.getTime()));}
+
 function loadFakeComments(count){
-    const container = document.getElementById("allComments");
+    const container=document.getElementById("allComments");
     for(let i=0;i<count;i++){
         if(commentIndex>=fakeComments.length) commentIndex=0;
-        let user = fakeUsers[Math.floor(Math.random()*fakeUsers.length)];
-        let text = fakeComments[Math.floor(Math.random()*fakeComments.length)];
-        let date = randomDate(new Date(2024,10,23),new Date()).toLocaleString();
-        container.innerHTML+=`<div class="comment"><b>${user} - ${date}</b><br>${text}</div>`;
+        let user=fakeUsers[Math.floor(Math.random()*fakeUsers.length)];
+        let text=fakeComments[Math.floor(Math.random()*fakeComments.length)];
+        let date=randomDate(new Date(2024,10,23),new Date()).toLocaleString();
+        container.innerHTML=`<div class="comment"><b>${user} - ${date}</b><br>${text}</div>`+container.innerHTML;
         commentIndex++;
     }
 }
 
-loadFakeComments(loadedComments);
+window.loadMoreComments=function(){loadFakeComments(20);};
 
-window.loadMoreComments = function(){
-    loadFakeComments(20);
-};
-
-// POST REAL COMMENTS
+// Post real comment
 window.postComment=function(){
     const text=document.getElementById("commentInput").value.trim();
     if(!text) return;
@@ -188,7 +203,7 @@ window.postComment=function(){
     document.getElementById("commentInput").value="";
 };
 
-// REAL COMMENTS LOAD
+// Load real comments
 onValue(ref(db,"comments"),snap=>{
     let container=document.getElementById("allComments");
     let data=snap.val()||{};
@@ -196,11 +211,14 @@ onValue(ref(db,"comments"),snap=>{
     keys.forEach(key=>{
         let c=data[key];
         let date=new Date(c.time).toLocaleString();
-        container.innerHTML+=`<div class="comment"><b>RealUser - ${date}</b><br>${c.text}</div>`;
+        container.innerHTML=`<div class="comment"><b>RealUser - ${date}</b><br>${c.text}</div>`+container.innerHTML;
     });
 });
 
-// SHARE BUTTONS
+// Auto add new fake comment every minute
+setInterval(()=>{loadFakeComments(1);},60000);
+
+// Share buttons
 window.share=function(platform){
     const url=window.location.href;
     if(platform==="facebook") window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`,"_blank");
@@ -209,9 +227,12 @@ window.share=function(platform){
     else if(platform==="tiktok") window.open(`https://www.tiktok.com/@prof.lord.peps?_r=1&_t=ZS-91yYLzVtT32`,"_blank");
 };
 
-// AUTO ADD NEW RANDOM COMMENT EVERY MINUTE
-setInterval(()=>{loadFakeComments(10);},60000);
+// Show comments section after redirect
+window.showCommentsSection=function(){
+    document.getElementById("commentSection").style.display="block";
+};
 
 </script>
+
 </body>
 </html>
