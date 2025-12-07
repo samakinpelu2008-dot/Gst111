@@ -13,42 +13,36 @@ body {
     text-align:center;
 }
 h1 {
-    font-size: 36px;
-    margin-top:20px;
-    text-shadow: 2px 2px #000;
+    font-size: 28px;
+    margin-top:15px;
+    text-shadow: 1px 1px #000;
 }
 .card {
     background: rgba(0,0,0,0.7);
-    width: 350px;
-    margin: 20px auto;
-    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    margin: 15px auto;
+    padding: 15px;
     border-radius:15px;
-    box-shadow:0 0 20px rgba(0,0,0,0.5);
+    box-shadow:0 0 15px rgba(0,0,0,0.5);
 }
 .nominee-container {
     display:flex;
-    justify-content:center;
+    justify-content:space-around;
     align-items:center;
+    flex-wrap:wrap;
+    margin-top:10px;
 }
 .nominee-img {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     object-fit: cover;
     border-radius:50%;
-    margin: 10px;
     border: 3px solid #fff;
-    transition: all 0.5s;
-}
-.nominee-img.leader {
-    animation: glow 0.5s ease-in-out;
-}
-@keyframes glow {
-    0%,100% { box-shadow: none; transform: scale(1);}
-    50% { box-shadow: 0 0 20px #ffcc00; transform: scale(1.1);}
 }
 button.voteBtn {
-    padding:10px 20px;
-    margin:10px;
+    padding:8px 18px;
+    margin:5px;
     font-size:16px;
     font-weight:bold;
     border:none;
@@ -62,21 +56,19 @@ button.voteBtn:disabled {
     cursor:not-allowed;
 }
 .votes {
-    font-size:22px;
+    font-size:20px;
     font-weight:bold;
     color:#ffcc00;
     margin-top:5px;
-    transition: transform 0.3s;
 }
 .comment-section {
     background: rgba(255,255,255,0.1);
     padding:10px;
-    margin-top:20px;
+    margin-top:10px;
     border-radius:10px;
     text-align:left;
     max-height:250px;
     overflow-y:auto;
-    display:none;
 }
 .comment {
     background: rgba(0,0,0,0.3);
@@ -85,16 +77,16 @@ button.voteBtn:disabled {
     border-radius:5px;
 }
 #countdown {
-    font-size:20px;
+    font-size:18px;
     font-weight:bold;
     margin-top:10px;
     color:#ff4444;
 }
 .share-section {
-    margin-top:15px;
+    margin-top:10px;
 }
 .share-section button {
-    padding:8px 15px;
+    padding:8px 12px;
     margin:5px;
     font-size:14px;
     border-radius:5px;
@@ -107,54 +99,48 @@ button.voteBtn:disabled {
     margin-top:10px;
     font-size:16px;
 }
-.tiktok-follow a img {
-    width:30px;
+.tiktok-follow img {
+    width:40px;
     vertical-align:middle;
 }
-.red-warning {
+.redirect-warning {
     color:red;
     font-weight:bold;
-    margin-top:10px;
-}
-#commentBtn {
-    padding:8px 15px;
-    margin:10px;
-    font-size:14px;
-    border-radius:5px;
-    border:none;
-    background:#0984e3;
-    color:white;
-    cursor:pointer;
+    margin-top:5px;
+    display:none;
 }
 </style>
 </head>
 <body>
 
 <h1>GOAT Awards Voting</h1>
-
 <div id="countdown"></div>
 
 <div class="card">
-    <h2>Category 1: GOAT</h2>
+    <h2>Category: GOAT</h2>
     <div class="nominee-container">
-        <img src="https://i.ibb.co/GQW8P8qN/images-16.jpg" class="nominee-img" id="imgA" alt="Messi">
-        <img src="https://i.ibb.co/VWCzf1QP/images.jpg" class="nominee-img" id="imgB" alt="Ronaldo">
+        <div>
+            <img src="https://i.ibb.co/GQW8P8qN/images-16.jpg" class="nominee-img" alt="Messi">
+            <p class="votes">Messi: <span id="voteA">1823441</span></p>
+            <button class="voteBtn" onclick="vote('A')">Vote Messi</button>
+        </div>
+        <div>
+            <img src="https://i.ibb.co/VWCzf1QP/images.jpg" class="nominee-img" alt="Ronaldo">
+            <p class="votes">Ronaldo: <span id="voteB">1895755</span></p>
+            <button class="voteBtn" onclick="vote('B')">Vote Ronaldo</button>
+        </div>
     </div>
-    <div>
-        <button class="voteBtn" id="voteA">Vote Messi</button>
-        <button class="voteBtn" id="voteB">Vote Ronaldo</button>
-    </div>
-    <p class="votes">Messi: <span id="voteCountA">1823441</span></p>
-    <p class="votes">Ronaldo: <span id="voteCountB">1895755</span></p>
-    <div id="redWarning" class="red-warning" style="display:none;">Don’t mind the redirect, click again to vote!</div>
+    <div class="redirect-warning" id="voteRedirectWarning">Don't mind the redirect! Click again to vote.</div>
 </div>
 
 <div class="card">
-    <h3>Comments</h3>
-    <button id="commentBtn">View Comments</button>
-    <div class="comment-section" id="comments"></div>
-    <input type="text" id="commentInput" placeholder="Write your comment..." style="width:70%;padding:5px; display:none;">
-    <button id="postComment" style="display:none;">Post</button>
+    <button onclick="toggleComments()">Show/Hide Comments</button>
+    <div id="commentSectionContainer" style="display:none;">
+        <div class="comment-section" id="comments"></div>
+        <input type="text" id="commentInput" placeholder="Write your comment..." style="width:70%;padding:5px;">
+        <button onclick="addComment()">Post</button>
+        <div class="redirect-warning" id="commentRedirectWarning">Don't mind the redirect! Click again to see comments.</div>
+    </div>
 </div>
 
 <div class="share-section">
@@ -162,169 +148,139 @@ button.voteBtn:disabled {
 </div>
 
 <div class="tiktok-follow">
-    Follow for more: <a href="https://www.tiktok.com/@prof.lord.peps?_r=1&_t=ZS-91yYLzVtT32" target="_blank"><img src="https://i.ibb.co/4ZvMhKcy/images-1.png" alt="TikTok"></a>
+    Follow for more: <a href="https://www.tiktok.com/@prof.lord.peps?_r=1&_t=ZS-91yYLzVtT32" target="_blank">
+        <img src="https://i.ibb.co/4ZvMhKcy/images-1.png" alt="TikTok">
+    </a>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getDatabase, ref, set, get, onValue, push } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+import { getDatabase, ref, get, set, update, onValue, push } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAT9v-MfKjPpBHT58Iwt8JznDvwRjPIhqs",
-  authDomain: "goat-awards.firebaseapp.com",
-  databaseURL: "https://goat-awards-default-rtdb.firebaseio.com/",
-  projectId: "goat-awards",
-  storageBucket: "goat-awards.appspot.com",
-  messagingSenderId: "210046042590",
-  appId: "1:210046042590:web:b9473b14f8834fe0521d4f"
+    apiKey: "AIzaSyAT9v-MfKjPpBHT58Iwt8JznDvwRjPIhqs",
+    authDomain: "goat-awards.firebaseapp.com",
+    databaseURL: "https://goat-awards-default-rtdb.firebaseio.com/",
+    projectId: "goat-awards",
+    storageBucket: "goat-awards.appspot.com",
+    messagingSenderId: "210046042590",
+    appId: "1:210046042590:web:b9473b14f8834fe0521d4f"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-let userId = localStorage.getItem('userId');
-if(!userId) {
-    userId = 'user_' + Date.now();
-    localStorage.setItem('userId', userId);
-}
+let userVoteTime = 0;
+let userVote = null;
 
-const voteButtons = { A: document.getElementById('voteA'), B: document.getElementById('voteB') };
-const voteCounts = { A: document.getElementById('voteCountA'), B: document.getElementById('voteCountB') };
-const redWarning = document.getElementById('redWarning');
-const redirectUrl = "https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9";
-
-let redirectDone = JSON.parse(localStorage.getItem('redirectDone')) || {A:false,B:false};
-let lastVoteTime = JSON.parse(localStorage.getItem('lastVoteTime')) || {A:0,B:0};
-const cooldown = 30*60*1000; // 30 minutes
-
-// Load votes
-function loadVotes(){
-    const votesRef = ref(db,'votes');
-    onValue(votesRef,(snapshot)=>{
-        const data = snapshot.val() || {A:1823441,B:1895755};
-        voteCounts.A.innerText = data.A;
-        voteCounts.B.innerText = data.B;
-        highlightLeader(data);
-    });
-}
-function highlightLeader(data){
-    if(data.A > data.B){
-        document.getElementById('imgA').classList.add('leader');
-        document.getElementById('imgB').classList.remove('leader');
-    }else{
-        document.getElementById('imgB').classList.add('leader');
-        document.getElementById('imgA').classList.remove('leader');
-    }
-}
-
-// Voting
-function vote(person){
-    const now = Date.now();
-    if(now - lastVoteTime[person] < cooldown){
-        alert("You have already voted! Wait a while to vote again.");
-        return;
-    }
-
-    if(!redirectDone[person]){
-        redirectDone[person] = true;
-        localStorage.setItem('redirectDone',JSON.stringify(redirectDone));
-        window.location.href = redirectUrl;
-        return;
-    }
-
-    // Count vote
-    get(ref(db,'votes')).then(snapshot=>{
-        let data = snapshot.val() || {A:1823441,B:1895755};
-        data[person]++;
-        set(ref(db,'votes'),data);
-        lastVoteTime[person] = now;
-        localStorage.setItem('lastVoteTime',JSON.stringify(lastVoteTime));
-        redWarning.style.display = 'block';
-        redirectDone[person] = false;
-        localStorage.setItem('redirectDone',JSON.stringify(redirectDone));
-    });
-}
-
-voteButtons.A.addEventListener('click',()=>vote('A'));
-voteButtons.B.addEventListener('click',()=>vote('B'));
+const startingVotes = { A:1823441, B:1895755 };
 
 // Countdown
-function countdown() {
+function countdown(){
     const endDate = new Date("Dec 23, 2025 23:59:59").getTime();
-    setInterval(() => {
+    setInterval(()=>{
         let now = new Date().getTime();
         let distance = endDate - now;
         if(distance<0){
             document.getElementById('countdown').innerText="Voting ended!";
             return;
         }
-        let days = Math.floor(distance/(1000*60*60*24));
-        let hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-        let minutes = Math.floor((distance%(1000*60*60))/(1000*60));
-        let seconds = Math.floor((distance%(1000*60))/1000);
-        document.getElementById('countdown').innerText = `Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+        let days=Math.floor(distance/(1000*60*60*24));
+        let hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+        let minutes=Math.floor((distance%(1000*60*60))/(1000*60));
+        let seconds=Math.floor((distance%(1000*60))/1000);
+        document.getElementById('countdown').innerText=`Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
     },1000);
 }
 
-// Comments
-const commentBtn = document.getElementById('commentBtn');
-const commentSection = document.getElementById('comments');
-const commentInput = document.getElementById('commentInput');
-const postComment = document.getElementById('postComment');
-
-let redirectCommentDone = JSON.parse(localStorage.getItem('redirectCommentDone')) || false;
-
-commentBtn.addEventListener('click', ()=>{
-    if(!redirectCommentDone){
-        redirectCommentDone = true;
-        localStorage.setItem('redirectCommentDone',true);
-        window.location.href = redirectUrl;
-        return;
-    }
-    commentSection.style.display='block';
-    commentInput.style.display='inline-block';
-    postComment.style.display='inline-block';
-    loadComments();
-});
-
-// Load live comments
-function loadComments(){
-    const commentsRef = ref(db,'comments');
-    onValue(commentsRef,(snapshot)=>{
-        const data = snapshot.val() || [];
-        commentSection.innerHTML='';
-        data.reverse().forEach(c=>{
-            const div = document.createElement('div');
-            div.className='comment';
-            div.innerHTML=`<b>${c.user}</b>: ${c.text} <br><i>${c.time}</i>`;
-            commentSection.appendChild(div);
-        });
+// Load votes
+function loadVotes(){
+    const voteRef = ref(db, 'votes');
+    onValue(voteRef, (snapshot)=>{
+        let data = snapshot.val();
+        if(!data){
+            set(voteRef, startingVotes);
+            data = startingVotes;
+        }
+        document.getElementById('voteA').innerText=data.A;
+        document.getElementById('voteB').innerText=data.B;
     });
 }
 
-// Add comment
-postComment.addEventListener('click',()=>{
-    if(commentInput.value.trim()==='') return;
-    const newComment = {
-        user: 'Fan'+Math.floor(Math.random()*1000),
-        text: commentInput.value,
-        time: new Date().toLocaleString()
-    };
-    push(ref(db,'comments'),newComment);
-    commentInput.value='';
-});
+// Voting with 30 min cooldown
+function vote(person){
+    const now = new Date().getTime();
+    if(userVoteTime && now - userVoteTime < 30*60*1000){
+        alert("You must wait 30 minutes before voting again!");
+        return;
+    }
+
+    // Redirect first
+    window.open("https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9","_blank");
+    document.getElementById('voteRedirectWarning').style.display="block";
+
+    setTimeout(()=>{
+        const voteRef = ref(db, 'votes');
+        get(voteRef).then(snapshot=>{
+            let data = snapshot.val();
+            if(!data) data = startingVotes;
+            if(person==='A') data.A++;
+            if(person==='B') data.B++;
+            set(voteRef, data);
+            userVote = person;
+            userVoteTime = new Date().getTime();
+            document.getElementById('voteRedirectWarning').style.display="none";
+        });
+    },1000); // slight delay to simulate redirect
+}
+
+// Comments
+const commentRef = ref(db,'comments');
+function toggleComments(){
+    const container = document.getElementById('commentSectionContainer');
+    container.style.display = container.style.display==='none' ? 'block':'none';
+    if(container.style.display==='block'){
+        // Redirect first
+        window.open("https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9","_blank");
+        document.getElementById('commentRedirectWarning').style.display="block";
+        setTimeout(()=>{document.getElementById('commentRedirectWarning').style.display="none";},2000);
+    }
+}
+function loadComments(){
+    onValue(commentRef,(snapshot)=>{
+        const data = snapshot.val();
+        const commentDiv = document.getElementById('comments');
+        commentDiv.innerHTML='';
+        if(data){
+            Object.values(data).forEach(c=>{
+                const div=document.createElement('div');
+                div.className='comment';
+                div.innerHTML=`<b>${c.user}</b>: ${c.text} <br><i>${c.time}</i>`;
+                commentDiv.appendChild(div);
+            });
+        }
+    });
+}
+function addComment(){
+    const input=document.getElementById('commentInput');
+    if(input.value.trim()==='') return;
+    const newComment = {user:'Fan'+(Math.floor(Math.random()*100000)),text:input.value,time:new Date().toLocaleString()};
+    push(commentRef,newComment);
+    input.value='';
+}
 
 // Share
 function shareLink(){
-    const shareText=`Vote now for the GOAT Awards! ⚽🔥 Messi or Ronaldo? Click here and support your GOAT!`;
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`);
+    const shareText="Vote now for the GOAT Awards! Messi or Ronaldo? Support your favorite GOAT now!";
+    const url = encodeURIComponent(window.location.href);
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${shareText}`);
 }
 
-window.onload = function(){
+window.onload=function(){
     countdown();
     loadVotes();
-};
+    loadComments();
+}
 </script>
-
 </body>
 </html>
