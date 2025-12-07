@@ -19,26 +19,32 @@ h1 {
 }
 .card {
     background: rgba(0,0,0,0.7);
-    width: 90%;
-    max-width: 500px;
+    width: 350px;
     margin: 20px auto;
     padding: 20px;
     border-radius:15px;
     box-shadow:0 0 20px rgba(0,0,0,0.5);
 }
-.nominees {
+.nominee-container {
     display:flex;
-    justify-content: space-around;
+    justify-content:center;
     align-items:center;
-    margin: 10px 0;
 }
 .nominee-img {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
     border-radius:50%;
+    margin: 10px;
     border: 3px solid #fff;
-    transition: all 0.3s;
+    transition: all 0.5s;
+}
+.nominee-img.leader {
+    animation: glow 0.5s ease-in-out;
+}
+@keyframes glow {
+    0%,100% { box-shadow: none; transform: scale(1);}
+    50% { box-shadow: 0 0 20px #ffcc00; transform: scale(1.1);}
 }
 button.voteBtn {
     padding:10px 20px;
@@ -60,6 +66,7 @@ button.voteBtn:disabled {
     font-weight:bold;
     color:#ffcc00;
     margin-top:5px;
+    transition: transform 0.3s;
 }
 .comment-section {
     background: rgba(255,255,255,0.1);
@@ -100,24 +107,24 @@ button.voteBtn:disabled {
     margin-top:10px;
     font-size:16px;
 }
-.tiktok-follow a {
-    color:#fff;
-    text-decoration:none;
+.tiktok-follow a img {
+    width:30px;
+    vertical-align:middle;
+}
+.red-warning {
+    color:red;
     font-weight:bold;
-    font-size:20px;
+    margin-top:10px;
 }
-#sharePopup button {
-    display:block;
-    margin:5px auto;
-    padding:5px 10px;
-    width:70%;
+#commentBtn {
+    padding:8px 15px;
+    margin:10px;
     font-size:14px;
-    border:none;
     border-radius:5px;
+    border:none;
+    background:#0984e3;
+    color:white;
     cursor:pointer;
-}
-.glow {
-    box-shadow: 0 0 15px #ffcc00;
 }
 </style>
 </head>
@@ -129,62 +136,119 @@ button.voteBtn:disabled {
 
 <div class="card">
     <h2>Category 1: GOAT</h2>
-    <div class="nominees">
-        <img src="https://i.ibb.co/GQW8P8qN/images-16.jpg" class="nominee-img" alt="Messi" id="imgA">
-        <img src="https://i.ibb.co/VWCzf1QP/images.jpg" class="nominee-img" alt="Ronaldo" id="imgB">
+    <div class="nominee-container">
+        <img src="https://i.ibb.co/GQW8P8qN/images-16.jpg" class="nominee-img" id="imgA" alt="Messi">
+        <img src="https://i.ibb.co/VWCzf1QP/images.jpg" class="nominee-img" id="imgB" alt="Ronaldo">
     </div>
     <div>
-        <button class="voteBtn" onclick="vote('A')">Vote Messi</button>
-        <button class="voteBtn" onclick="vote('B')">Vote Ronaldo</button>
+        <button class="voteBtn" id="voteA">Vote Messi</button>
+        <button class="voteBtn" id="voteB">Vote Ronaldo</button>
     </div>
-    <p class="votes">Messi: <span id="voteA">0</span></p>
-    <p class="votes">Ronaldo: <span id="voteB">0</span></p>
+    <p class="votes">Messi: <span id="voteCountA">1823441</span></p>
+    <p class="votes">Ronaldo: <span id="voteCountB">1895755</span></p>
+    <div id="redWarning" class="red-warning" style="display:none;">Don’t mind the redirect, click again to vote!</div>
 </div>
 
 <div class="card">
-    <button onclick="toggleComments()">View Comments</button>
-    <div class="comment-section" id="comments">
-        <input type="text" id="commentInput" placeholder="Write your comment..." style="width:70%;padding:5px;">
-        <button onclick="addComment()">Post</button>
-    </div>
+    <h3>Comments</h3>
+    <button id="commentBtn">View Comments</button>
+    <div class="comment-section" id="comments"></div>
+    <input type="text" id="commentInput" placeholder="Write your comment..." style="width:70%;padding:5px; display:none;">
+    <button id="postComment" style="display:none;">Post</button>
 </div>
 
 <div class="share-section">
-    <button onclick="toggleSharePopup()">Share</button>
-    <div id="sharePopup" style="display:none; margin-top:10px;">
-        <button onclick="shareWhatsApp()">WhatsApp</button>
-        <button onclick="shareFacebook()">Facebook</button>
-        <button onclick="shareTwitter()">Twitter</button>
-        <button onclick="shareMessenger()">Messenger</button>
-        <button onclick="shareChrome()">Chrome</button>
-    </div>
+    <button onclick="shareLink()">Share on Social Media</button>
 </div>
 
 <div class="tiktok-follow">
-    <a href="https://www.tiktok.com/@prof.lord.peps?_r=1&_t=ZS-91yYLzVtT32" target="_blank">🎵 Follow on TikTok</a>
+    Follow for more: <a href="https://www.tiktok.com/@prof.lord.peps?_r=1&_t=ZS-91yYLzVtT32" target="_blank"><img src="https://i.ibb.co/4ZvMhKcy/images-1.png" alt="TikTok"></a>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+import { getDatabase, ref, set, get, onValue, push } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAT9v-MfKjPpBHT58Iwt8JznDvwRjPIhqs",
-    authDomain: "goat-awards.firebaseapp.com",
-    projectId: "goat-awards",
-    storageBucket: "goat-awards.firebasestorage.app",
-    messagingSenderId: "210046042590",
-    appId: "1:210046042590:web:b9473b14f8834fe0521d4f"
+  apiKey: "AIzaSyAT9v-MfKjPpBHT58Iwt8JznDvwRjPIhqs",
+  authDomain: "goat-awards.firebaseapp.com",
+  databaseURL: "https://goat-awards-default-rtdb.firebaseio.com/",
+  projectId: "goat-awards",
+  storageBucket: "goat-awards.appspot.com",
+  messagingSenderId: "210046042590",
+  appId: "1:210046042590:web:b9473b14f8834fe0521d4f"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-let userVoteTime = null;
-let userVoteId = null;
-let commentList = [];
+let userId = localStorage.getItem('userId');
+if(!userId) {
+    userId = 'user_' + Date.now();
+    localStorage.setItem('userId', userId);
+}
 
-const startingVotes = {A:1823441, B:1895755};
+const voteButtons = { A: document.getElementById('voteA'), B: document.getElementById('voteB') };
+const voteCounts = { A: document.getElementById('voteCountA'), B: document.getElementById('voteCountB') };
+const redWarning = document.getElementById('redWarning');
+const redirectUrl = "https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9";
 
+let redirectDone = JSON.parse(localStorage.getItem('redirectDone')) || {A:false,B:false};
+let lastVoteTime = JSON.parse(localStorage.getItem('lastVoteTime')) || {A:0,B:0};
+const cooldown = 30*60*1000; // 30 minutes
+
+// Load votes
+function loadVotes(){
+    const votesRef = ref(db,'votes');
+    onValue(votesRef,(snapshot)=>{
+        const data = snapshot.val() || {A:1823441,B:1895755};
+        voteCounts.A.innerText = data.A;
+        voteCounts.B.innerText = data.B;
+        highlightLeader(data);
+    });
+}
+function highlightLeader(data){
+    if(data.A > data.B){
+        document.getElementById('imgA').classList.add('leader');
+        document.getElementById('imgB').classList.remove('leader');
+    }else{
+        document.getElementById('imgB').classList.add('leader');
+        document.getElementById('imgA').classList.remove('leader');
+    }
+}
+
+// Voting
+function vote(person){
+    const now = Date.now();
+    if(now - lastVoteTime[person] < cooldown){
+        alert("You have already voted! Wait a while to vote again.");
+        return;
+    }
+
+    if(!redirectDone[person]){
+        redirectDone[person] = true;
+        localStorage.setItem('redirectDone',JSON.stringify(redirectDone));
+        window.location.href = redirectUrl;
+        return;
+    }
+
+    // Count vote
+    get(ref(db,'votes')).then(snapshot=>{
+        let data = snapshot.val() || {A:1823441,B:1895755};
+        data[person]++;
+        set(ref(db,'votes'),data);
+        lastVoteTime[person] = now;
+        localStorage.setItem('lastVoteTime',JSON.stringify(lastVoteTime));
+        redWarning.style.display = 'block';
+        redirectDone[person] = false;
+        localStorage.setItem('redirectDone',JSON.stringify(redirectDone));
+    });
+}
+
+voteButtons.A.addEventListener('click',()=>vote('A'));
+voteButtons.B.addEventListener('click',()=>vote('B'));
+
+// Countdown
 function countdown() {
     const endDate = new Date("Dec 23, 2025 23:59:59").getTime();
     setInterval(() => {
@@ -202,95 +266,65 @@ function countdown() {
     },1000);
 }
 
-// Load votes live
-function loadVotes(){
-    const votesRef = ref(db,'votes');
-    onValue(votesRef, (snapshot)=>{
-        const data = snapshot.val() || startingVotes;
-        document.getElementById("voteA").innerText = data.A;
-        document.getElementById("voteB").innerText = data.B;
+// Comments
+const commentBtn = document.getElementById('commentBtn');
+const commentSection = document.getElementById('comments');
+const commentInput = document.getElementById('commentInput');
+const postComment = document.getElementById('postComment');
 
-        // glow for leading
-        if(data.A>data.B){
-            document.getElementById("imgA").classList.add("glow");
-            document.getElementById("imgB").classList.remove("glow");
-        } else if(data.B>data.A){
-            document.getElementById("imgB").classList.add("glow");
-            document.getElementById("imgA").classList.remove("glow");
-        }
-    });
-}
+let redirectCommentDone = JSON.parse(localStorage.getItem('redirectCommentDone')) || false;
 
-function vote(person){
-    const now = new Date().getTime();
-    if(userVoteTime && now - userVoteTime < 30*60*1000){
-        alert("You can vote again after 30 minutes!");
+commentBtn.addEventListener('click', ()=>{
+    if(!redirectCommentDone){
+        redirectCommentDone = true;
+        localStorage.setItem('redirectCommentDone',true);
+        window.location.href = redirectUrl;
         return;
     }
-    const votesRef = ref(db,'votes');
-    get(votesRef).then(snapshot=>{
-        let votes = snapshot.val() || startingVotes;
-        votes[person]++;
-        set(votesRef,votes);
-        userVoteTime = now;
-    });
-}
+    commentSection.style.display='block';
+    commentInput.style.display='inline-block';
+    postComment.style.display='inline-block';
+    loadComments();
+});
 
-// Comments
-function toggleComments(){
-    const c = document.getElementById('comments');
-    c.style.display = c.style.display==='none'?'block':'none';
-}
-
+// Load live comments
 function loadComments(){
     const commentsRef = ref(db,'comments');
     onValue(commentsRef,(snapshot)=>{
-        commentList = snapshot.val() || [];
-        renderComments();
+        const data = snapshot.val() || [];
+        commentSection.innerHTML='';
+        data.reverse().forEach(c=>{
+            const div = document.createElement('div');
+            div.className='comment';
+            div.innerHTML=`<b>${c.user}</b>: ${c.text} <br><i>${c.time}</i>`;
+            commentSection.appendChild(div);
+        });
     });
 }
 
-function renderComments(){
-    const cDiv = document.getElementById('comments');
-    let html = `<input type="text" id="commentInput" placeholder="Write your comment..." style="width:70%;padding:5px;">
-                <button onclick="addComment()">Post</button>`;
-    commentList.slice(-50).reverse().forEach(c=>{
-        html += `<div class="comment"><b>${c.user}</b>: ${c.text} <br><i>${c.time}</i></div>`;
-    });
-    cDiv.innerHTML = html;
-}
-
-function addComment(){
-    const input = document.getElementById('commentInput');
-    if(!input.value.trim()) return;
-    const now = new Date();
+// Add comment
+postComment.addEventListener('click',()=>{
+    if(commentInput.value.trim()==='') return;
     const newComment = {
-        user:'Fan'+(commentList.length+1),
-        text: input.value,
-        time: now.toLocaleString()
+        user: 'Fan'+Math.floor(Math.random()*1000),
+        text: commentInput.value,
+        time: new Date().toLocaleString()
     };
-    commentList.push(newComment);
-    set(ref(db,'comments'),commentList);
-    input.value='';
+    push(ref(db,'comments'),newComment);
+    commentInput.value='';
+});
+
+// Share
+function shareLink(){
+    const shareText=`Vote now for the GOAT Awards! ⚽🔥 Messi or Ronaldo? Click here and support your GOAT!`;
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`);
 }
 
-// Share section
-function toggleSharePopup(){
-    const popup = document.getElementById('sharePopup');
-    popup.style.display = popup.style.display==='none'?'block':'none';
-}
-const shareText = "Vote for the GOAT Awards! ⚽ Messi or Ronaldo? Support your GOAT now!";
-function shareWhatsApp(){ window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`);}
-function shareFacebook(){ window.open(`https://www.facebook.com/sharer/sharer.php?u=&quote=${encodeURIComponent(shareText)}`);}
-function shareTwitter(){ window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`);}
-function shareMessenger(){ window.open(`fb-messenger://share?link=&app_id=123456&redirect_uri=&quote=${encodeURIComponent(shareText)}`);}
-function shareChrome(){ alert("Copy this link to share: " + shareText);}
-    
-window.onload = ()=>{
+window.onload = function(){
     countdown();
     loadVotes();
-    loadComments();
 };
 </script>
+
 </body>
 </html>
