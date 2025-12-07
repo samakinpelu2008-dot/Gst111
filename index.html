@@ -5,110 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GOAT Awards Voting</title>
 <style>
-body {
-    margin:0;
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    color:#fff;
-    text-align:center;
-}
-h1 {
-    font-size: 28px;
-    margin-top:15px;
-    text-shadow: 1px 1px #000;
-}
-.card {
-    background: rgba(0,0,0,0.7);
-    width: 90%;
-    max-width: 400px;
-    margin: 15px auto;
-    padding: 15px;
-    border-radius:15px;
-    box-shadow:0 0 15px rgba(0,0,0,0.5);
-}
-.nominee-container {
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
-    flex-wrap:wrap;
-    margin-top:10px;
-}
-.nominee-img {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    border-radius:50%;
-    border: 3px solid #fff;
-}
-button.voteBtn {
-    padding:8px 18px;
-    margin:5px;
-    font-size:16px;
-    font-weight:bold;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-    background:#e63946;
-    color:#fff;
-}
-button.voteBtn:disabled {
-    background:#555;
-    cursor:not-allowed;
-}
-.votes {
-    font-size:20px;
-    font-weight:bold;
-    color:#ffcc00;
-    margin-top:5px;
-}
-.comment-section {
-    background: rgba(255,255,255,0.1);
-    padding:10px;
-    margin-top:10px;
-    border-radius:10px;
-    text-align:left;
-    max-height:250px;
-    overflow-y:auto;
-}
-.comment {
-    background: rgba(0,0,0,0.3);
-    margin:5px 0;
-    padding:5px 10px;
-    border-radius:5px;
-}
-#countdown {
-    font-size:18px;
-    font-weight:bold;
-    margin-top:10px;
-    color:#ff4444;
-}
-.share-section {
-    margin-top:10px;
-}
-.share-section button {
-    padding:8px 12px;
-    margin:5px;
-    font-size:14px;
-    border-radius:5px;
-    border:none;
-    background:#00b894;
-    color:white;
-    cursor:pointer;
-}
-.tiktok-follow {
-    margin-top:10px;
-    font-size:16px;
-}
-.tiktok-follow img {
-    width:40px;
-    vertical-align:middle;
-}
-.redirect-warning {
-    color:red;
-    font-weight:bold;
-    margin-top:5px;
-    display:none;
-}
+body { margin:0; font-family:Arial,sans-serif; background:linear-gradient(135deg,#0f2027,#203a43,#2c5364); color:#fff; text-align:center;}
+h1 { font-size:28px; margin-top:15px; text-shadow:1px 1px #000;}
+.card { background: rgba(0,0,0,0.7); width:90%; max-width:400px; margin:15px auto; padding:15px; border-radius:15px; box-shadow:0 0 15px rgba(0,0,0,0.5);}
+.nominee-container { display:flex; justify-content:space-around; align-items:center; flex-wrap:wrap; margin-top:10px;}
+.nominee-img { width:120px; height:120px; object-fit:cover; border-radius:50%; border:3px solid #fff;}
+button.voteBtn { padding:8px 18px; margin:5px; font-size:16px; font-weight:bold; border:none; border-radius:5px; cursor:pointer; background:#e63946; color:#fff;}
+button.voteBtn:disabled { background:#555; cursor:not-allowed;}
+.votes { font-size:20px; font-weight:bold; color:#ffcc00; margin-top:5px;}
+.comment-section { background: rgba(255,255,255,0.1); padding:10px; margin-top:10px; border-radius:10px; text-align:left; max-height:250px; overflow-y:auto;}
+.comment { background: rgba(0,0,0,0.3); margin:5px 0; padding:5px 10px; border-radius:5px;}
+#countdown { font-size:18px; font-weight:bold; margin-top:10px; color:#ff4444;}
+.share-section { margin-top:10px;}
+.share-section button { padding:8px 12px; margin:5px; font-size:14px; border-radius:5px; border:none; background:#00b894; color:white; cursor:pointer;}
+.tiktok-follow { margin-top:10px; font-size:16px;}
+.tiktok-follow img { width:40px; vertical-align:middle;}
+.redirect-warning { color:red; font-weight:bold; margin-top:5px; display:none;}
 </style>
 </head>
 <body>
@@ -122,29 +34,29 @@ button.voteBtn:disabled {
         <div>
             <img src="https://i.ibb.co/GQW8P8qN/images-16.jpg" class="nominee-img" alt="Messi">
             <p class="votes">Messi: <span id="voteA">1823441</span></p>
-            <button class="voteBtn" onclick="vote('A')">Vote Messi</button>
+            <button class="voteBtn" id="voteA-btn">Vote Messi</button>
         </div>
         <div>
             <img src="https://i.ibb.co/VWCzf1QP/images.jpg" class="nominee-img" alt="Ronaldo">
             <p class="votes">Ronaldo: <span id="voteB">1895755</span></p>
-            <button class="voteBtn" onclick="vote('B')">Vote Ronaldo</button>
+            <button class="voteBtn" id="voteB-btn">Vote Ronaldo</button>
         </div>
     </div>
     <div class="redirect-warning" id="voteRedirectWarning">Don't mind the redirect! Click again to vote.</div>
 </div>
 
 <div class="card">
-    <button onclick="toggleComments()">Show/Hide Comments</button>
+    <button id="showCommentsBtn">Show Comments</button>
     <div id="commentSectionContainer" style="display:none;">
         <div class="comment-section" id="comments"></div>
         <input type="text" id="commentInput" placeholder="Write your comment..." style="width:70%;padding:5px;">
-        <button onclick="addComment()">Post</button>
+        <button id="postCommentBtn">Post</button>
         <div class="redirect-warning" id="commentRedirectWarning">Don't mind the redirect! Click again to see comments.</div>
     </div>
 </div>
 
 <div class="share-section">
-    <button onclick="shareLink()">Share on Social Media</button>
+    <button id="shareBtn">Share on Social Media</button>
 </div>
 
 <div class="tiktok-follow">
@@ -155,8 +67,9 @@ button.voteBtn:disabled {
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getDatabase, ref, get, set, update, onValue, push } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+import { getDatabase, ref, get, set, push, onValue, update } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
+// Firebase config
 const firebaseConfig = {
     apiKey: "AIzaSyAT9v-MfKjPpBHT58Iwt8JznDvwRjPIhqs",
     authDomain: "goat-awards.firebaseapp.com",
@@ -166,13 +79,16 @@ const firebaseConfig = {
     messagingSenderId: "210046042590",
     appId: "1:210046042590:web:b9473b14f8834fe0521d4f"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-let userVoteTime = 0;
-let userVote = null;
+const voteA_btn = document.getElementById('voteA-btn');
+const voteB_btn = document.getElementById('voteB-btn');
+const voteRedirectWarning = document.getElementById('voteRedirectWarning');
 
+let userVoteTime = localStorage.getItem('userVoteTime') || 0;
+
+// Starting votes
 const startingVotes = { A:1823441, B:1895755 };
 
 // Countdown
@@ -193,93 +109,100 @@ function countdown(){
     },1000);
 }
 
-// Load votes
+// Load votes live
 function loadVotes(){
-    const voteRef = ref(db, 'votes');
-    onValue(voteRef, (snapshot)=>{
+    const voteRef = ref(db,'votes');
+    onValue(voteRef,(snapshot)=>{
         let data = snapshot.val();
         if(!data){
             set(voteRef, startingVotes);
             data = startingVotes;
         }
-        document.getElementById('voteA').innerText=data.A;
-        document.getElementById('voteB').innerText=data.B;
+        document.getElementById('voteA').innerText = data.A;
+        document.getElementById('voteB').innerText = data.B;
     });
 }
 
-// Voting with 30 min cooldown
+// Voting function
 function vote(person){
     const now = new Date().getTime();
-    if(userVoteTime && now - userVoteTime < 30*60*1000){
+    if(now - userVoteTime < 30*60*1000){
         alert("You must wait 30 minutes before voting again!");
         return;
     }
 
-    // Redirect first
+    // Open redirect first
     window.open("https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9","_blank");
-    document.getElementById('voteRedirectWarning').style.display="block";
+    voteRedirectWarning.style.display="block";
 
     setTimeout(()=>{
-        const voteRef = ref(db, 'votes');
+        const voteRef = ref(db,'votes');
         get(voteRef).then(snapshot=>{
-            let data = snapshot.val();
-            if(!data) data = startingVotes;
+            let data = snapshot.val() || startingVotes;
             if(person==='A') data.A++;
             if(person==='B') data.B++;
-            set(voteRef, data);
-            userVote = person;
+            set(voteRef,data);
             userVoteTime = new Date().getTime();
-            document.getElementById('voteRedirectWarning').style.display="none";
+            localStorage.setItem('userVoteTime',userVoteTime);
+            voteRedirectWarning.style.display="none";
         });
-    },1000); // slight delay to simulate redirect
+    },1500);
 }
+
+voteA_btn.addEventListener('click',()=>vote('A'));
+voteB_btn.addEventListener('click',()=>vote('B'));
 
 // Comments
 const commentRef = ref(db,'comments');
-function toggleComments(){
-    const container = document.getElementById('commentSectionContainer');
-    container.style.display = container.style.display==='none' ? 'block':'none';
-    if(container.style.display==='block'){
-        // Redirect first
+const commentsDiv = document.getElementById('comments');
+const commentContainer = document.getElementById('commentSectionContainer');
+const showCommentsBtn = document.getElementById('showCommentsBtn');
+const commentInput = document.getElementById('commentInput');
+const postCommentBtn = document.getElementById('postCommentBtn');
+const commentRedirectWarning = document.getElementById('commentRedirectWarning');
+
+showCommentsBtn.addEventListener('click',()=>{
+    commentContainer.style.display = commentContainer.style.display==='none'?'block':'none';
+    if(commentContainer.style.display==='block'){
+        // redirect first
         window.open("https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9","_blank");
-        document.getElementById('commentRedirectWarning').style.display="block";
-        setTimeout(()=>{document.getElementById('commentRedirectWarning').style.display="none";},2000);
+        commentRedirectWarning.style.display='block';
+        setTimeout(()=>{commentRedirectWarning.style.display='none';},2000);
     }
-}
-function loadComments(){
-    onValue(commentRef,(snapshot)=>{
-        const data = snapshot.val();
-        const commentDiv = document.getElementById('comments');
-        commentDiv.innerHTML='';
-        if(data){
-            Object.values(data).forEach(c=>{
-                const div=document.createElement('div');
-                div.className='comment';
-                div.innerHTML=`<b>${c.user}</b>: ${c.text} <br><i>${c.time}</i>`;
-                commentDiv.appendChild(div);
-            });
-        }
-    });
-}
-function addComment(){
-    const input=document.getElementById('commentInput');
-    if(input.value.trim()==='') return;
-    const newComment = {user:'Fan'+(Math.floor(Math.random()*100000)),text:input.value,time:new Date().toLocaleString()};
+});
+
+// Load comments live
+onValue(commentRef, snapshot=>{
+    commentsDiv.innerHTML='';
+    const data = snapshot.val();
+    if(data){
+        Object.values(data).forEach(c=>{
+            const div=document.createElement('div');
+            div.className='comment';
+            div.innerHTML=`<b>${c.user}</b>: ${c.text} <br><i>${c.time}</i>`;
+            commentsDiv.appendChild(div);
+        });
+    }
+});
+
+// Add comment
+postCommentBtn.addEventListener('click',()=>{
+    if(commentInput.value.trim()==='') return;
+    const newComment = {user:'Fan'+Math.floor(Math.random()*100000),text:commentInput.value,time:new Date().toLocaleString()};
     push(commentRef,newComment);
-    input.value='';
-}
+    commentInput.value='';
+});
 
 // Share
-function shareLink(){
-    const shareText="Vote now for the GOAT Awards! Messi or Ronaldo? Support your favorite GOAT now!";
+document.getElementById('shareBtn').addEventListener('click',()=>{
+    const shareText="Vote now for the GOAT Awards! Messi or Ronaldo?";
     const url = encodeURIComponent(window.location.href);
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${shareText}`);
-}
+});
 
 window.onload=function(){
     countdown();
     loadVotes();
-    loadComments();
 }
 </script>
 </body>
