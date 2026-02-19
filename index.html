@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calculator Max - Scientific</title>
 <style>
+  /* Body and Calculator Container */
   body {
     margin:0;
     font-family: 'Segoe UI', sans-serif;
@@ -14,7 +15,6 @@
     align-items: center;
     height: 100vh;
   }
-
   .calculator {
     background: #1e293b;
     border-radius: 20px;
@@ -23,6 +23,7 @@
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   }
 
+  /* Display */
   .display {
     background: #111827;
     border-radius: 12px;
@@ -33,26 +34,38 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    position: relative;
   }
-
+  .display-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 5px;
+  }
+  #historyBtn {
+    padding: 5px 10px;
+    border-radius: 6px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
   .expression {
     font-size: 18px;
     color: #94a3b8;
     word-wrap: break-word;
   }
-
   .result {
     font-size: 28px;
     margin-top: 5px;
     word-wrap: break-word;
   }
 
+  /* Buttons Grid */
   .buttons {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 10px;
   }
-
   button {
     padding: 15px;
     font-size: 16px;
@@ -63,46 +76,62 @@
     color: white;
     transition: 0.2s;
   }
+  button:hover { background: #475569; }
+  button.operator { background: #f97316; }
+  button.equal { background: #22c55e; grid-column: span 2; }
+  button.zero { grid-column: span 2; }
 
-  button:hover {
-    background: #475569;
-  }
-
-  button.operator {
-    background: #f97316;
-  }
-
-  button.equal {
-    background: #22c55e;
-    grid-column: span 2;
-  }
-
-  button.zero {
-    grid-column: span 2;
-  }
-
-  .history {
-    background: #111827;
-    padding: 10px;
-    border-radius: 10px;
-    max-height: 120px;
+  /* History Overlay */
+  .history-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #0f172a;
+    color: #f8fafc;
+    display: none; /* hidden by default */
+    flex-direction: column;
+    z-index: 100;
     overflow-y: auto;
-    margin-bottom: 15px;
-    color: #cbd5e1;
-    font-size: 14px;
+  }
+  .history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #1e293b;
+    border-bottom: 1px solid #334155;
+  }
+  #historyList {
+    list-style: none;
+    padding: 15px;
+  }
+  #historyList li {
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+  #closeHistory {
+    padding: 5px 10px;
+    border-radius: 6px;
+    background: #f97316;
+    color: white;
+    border: none;
+    cursor: pointer;
   }
 </style>
 </head>
 <body>
 
 <div class="calculator">
+  <!-- Display + History Button -->
   <div class="display">
+    <div class="display-header">
+      <button id="historyBtn">History 📜</button>
+    </div>
     <div id="expression" class="expression">0</div>
     <div id="result" class="result">0</div>
   </div>
 
-  <div class="history" id="historyList"></div>
-
+  <!-- Buttons -->
   <div class="buttons">
     <button onclick="toggleDegRad()">DEG</button>
     <button onclick="memoryClear()">MC</button>
@@ -126,7 +155,7 @@
     <button onclick="backspace()" class="operator">⌫</button>
     <button onclick="append('%')" class="operator">%</button>
     <button onclick="append('/')" class="operator">÷</button>
-    <button onclick="append('!')" class="operator">!</button>
+    <button onclick="appendFunction('!')" class="operator">!</button>
 
     <button onclick="append('7')">7</button>
     <button onclick="append('8')">8</button>
@@ -151,105 +180,88 @@
   </div>
 </div>
 
+<!-- History Overlay -->
+<div id="historyOverlay" class="history-overlay">
+  <div class="history-header">
+    <h2>History</h2>
+    <button id="closeHistory">✖</button>
+  </div>
+  <ul id="historyList"></ul>
+</div>
+
 <script>
 let expressionDiv = document.getElementById('expression');
 let resultDiv = document.getElementById('result');
+let historyOverlay = document.getElementById('historyOverlay');
 let historyList = document.getElementById('historyList');
+let historyBtn = document.getElementById('historyBtn');
+let closeHistory = document.getElementById('closeHistory');
 let historyArray = [];
 let memory = 0;
 let degMode = true;
 
+// Toggle history overlay
+historyBtn.addEventListener('click', ()=> historyOverlay.style.display='flex');
+closeHistory.addEventListener('click', ()=> historyOverlay.style.display='none');
+
+// Calculator Functions
 function append(value){
-    if(expressionDiv.innerText === "0") expressionDiv.innerText = value;
-    else expressionDiv.innerText += value;
+    if(expressionDiv.innerText==="0") expressionDiv.innerText=value;
+    else expressionDiv.innerText+=value;
 }
 
 function appendFunction(func){
     switch(func){
-        case 'sin': expressionDiv.innerText += 'sin('; break;
-        case 'cos': expressionDiv.innerText += 'cos('; break;
-        case 'tan': expressionDiv.innerText += 'tan('; break;
-        case 'log': expressionDiv.innerText += 'log('; break;
-        case 'ln': expressionDiv.innerText += 'ln('; break;
-        case '√': expressionDiv.innerText += '√('; break;
-        case 'x²': expressionDiv.innerText += '**2'; break;
-        case 'x³': expressionDiv.innerText += '**3'; break;
-        case 'π': expressionDiv.innerText += 'Math.PI'; break;
-        case 'e': expressionDiv.innerText += 'Math.E'; break;
-        case '!': expressionDiv.innerText += 'factorial('; break;
+        case 'sin': expressionDiv.innerText+='sin('; break;
+        case 'cos': expressionDiv.innerText+='cos('; break;
+        case 'tan': expressionDiv.innerText+='tan('; break;
+        case 'log': expressionDiv.innerText+='log('; break;
+        case 'ln': expressionDiv.innerText+='ln('; break;
+        case '√': expressionDiv.innerText+='√('; break;
+        case 'x²': expressionDiv.innerText+='**2'; break;
+        case 'x³': expressionDiv.innerText+='**3'; break;
+        case 'π': expressionDiv.innerText+='Math.PI'; break;
+        case 'e': expressionDiv.innerText+='Math.E'; break;
+        case '!': expressionDiv.innerText+='factorial('; break;
     }
 }
 
-function clearAll(){
-    expressionDiv.innerText = '0';
-    resultDiv.innerText = '0';
-}
+function clearAll(){ expressionDiv.innerText='0'; resultDiv.innerText='0'; }
+function backspace(){ let exp=expressionDiv.innerText; expressionDiv.innerText=exp.slice(0,-1); if(expressionDiv.innerText==='') expressionDiv.innerText='0'; }
+function toggleDegRad(){ degMode=!degMode; alert(degMode?"Degree Mode":"Radian Mode"); }
 
-function backspace(){
-    let exp = expressionDiv.innerText;
-    expressionDiv.innerText = exp.slice(0,-1);
-    if(expressionDiv.innerText === '') expressionDiv.innerText = '0';
-}
-
-function toggleDegRad(){
-    degMode = !degMode;
-    alert(degMode ? "Degree Mode" : "Radian Mode");
-}
-
-// Memory functions
-function memoryClear(){ memory = 0; }
+// Memory
+function memoryClear(){ memory=0; }
 function memoryRecall(){ append(memory); }
-function memoryAdd(){ memory += parseFloat(resultDiv.innerText) || 0; }
-function memorySubtract(){ memory -= parseFloat(resultDiv.innerText) || 0; }
+function memoryAdd(){ memory+=parseFloat(resultDiv.innerText)||0; }
+function memorySubtract(){ memory-=parseFloat(resultDiv.innerText)||0; }
 
 // Factorial
-function factorial(n){
-    n = parseInt(n);
-    if(n < 0) return NaN;
-    if(n ===0 || n===1) return 1;
-    let res=1;
-    for(let i=2;i<=n;i++) res*=i;
-    return res;
-}
+function factorial(n){ n=parseInt(n); if(n<0) return NaN; if(n===0||n===1) return 1; let res=1; for(let i=2;i<=n;i++) res*=i; return res; }
 
+// Calculate
 function calculate(){
-    let exp = expressionDiv.innerText;
+    let exp=expressionDiv.innerText;
     try{
-        exp = exp.replace(/sin\(/g,'Math.sin(')
-                 .replace(/cos\(/g,'Math.cos(')
-                 .replace(/tan\(/g,'Math.tan(')
-                 .replace(/log\(/g,'Math.log10(')
-                 .replace(/ln\(/g,'Math.log(')
-                 .replace(/√\(/g,'Math.sqrt(')
-                 .replace(/factorial\(([^)]+)\)/g,(match,p1)=>`factorial(${p1})`);
+        exp=exp.replace(/sin\(/g,'Math.sin(').replace(/cos\(/g,'Math.cos(').replace(/tan\(/g,'Math.tan(')
+               .replace(/log\(/g,'Math.log10(').replace(/ln\(/g,'Math.log(')
+               .replace(/√\(/g,'Math.sqrt(')
+               .replace(/factorial\(([^)]+)\)/g,(m,p)=>`factorial(${p})`);
         if(degMode){
-            exp = exp.replace(/Math\.sin\(([^)]+)\)/g,(m,p1)=>`Math.sin(${p1}*Math.PI/180)`);
-            exp = exp.replace(/Math\.cos\(([^)]+)\)/g,(m,p1)=>`Math.cos(${p1}*Math.PI/180)`);
-            exp = exp.replace(/Math\.tan\(([^)]+)\)/g,(m,p1)=>`Math.tan(${p1}*Math.PI/180)`);
+            exp=exp.replace(/Math\.sin\(([^)]+)\)/g,(m,p)=>`Math.sin(${p}*Math.PI/180)`);
+            exp=exp.replace(/Math\.cos\(([^)]+)\)/g,(m,p)=>`Math.cos(${p}*Math.PI/180)`);
+            exp=exp.replace(/Math\.tan\(([^)]+)\)/g,(m,p)=>`Math.tan(${p}*Math.PI/180)`);
         }
-        let result = eval(exp);
-        resultDiv.innerText = result;
+        let result=eval(exp);
+        resultDiv.innerText=result;
         addToHistory(expressionDiv.innerText+" = "+result);
-    }catch(err){
-        resultDiv.innerText = "Error";
-    }
+    }catch(err){ resultDiv.innerText="Error"; }
 }
 
-function addToHistory(text){
-    historyArray.unshift(text);
-    if(historyArray.length>10) historyArray.pop();
-    renderHistory();
-}
+// History Functions
+function addToHistory(text){ historyArray.unshift(text); if(historyArray.length>50) historyArray.pop(); renderHistory(); }
+function renderHistory(){ historyList.innerHTML=''; historyArray.forEach(item=>{ let li=document.createElement('li'); li.innerText=item; historyList.appendChild(li); }); }
 
-function renderHistory(){
-    historyList.innerHTML='';
-    historyArray.forEach(item=>{
-        let li=document.createElement('li');
-        li.innerText=item;
-        historyList.appendChild(li);
-    });
-}
 </script>
-
 </body>
 </html>
