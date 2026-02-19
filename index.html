@@ -8,7 +8,7 @@
 body {
   margin:0;
   font-family:'Segoe UI',sans-serif;
-  background: linear-gradient(135deg,#0f172a,#1e293b);
+  background:#0f172a;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -91,18 +91,6 @@ button.zero { grid-column:span 2; }
 #historyList { list-style:none; padding:15px; }
 #historyList li { margin-bottom:10px; font-size:18px; }
 #closeHistory { padding:5px 10px; border-radius:6px; background:#f97316; color:white; border:none; cursor:pointer; }
-
-.mode-overlay {
-  position:fixed; top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  background:#1e293b;
-  color:white;
-  padding:20px;
-  border-radius:12px;
-  display:none;
-  z-index:110;
-}
-.mode-overlay button { margin:5px; }
 </style>
 </head>
 <body>
@@ -111,8 +99,7 @@ button.zero { grid-column:span 2; }
   <div class="display">
     <div class="display-header">
       <button id="historyBtn">History 📜</button>
-      <button id="shiftBtn">SHIFT</button>
-      <button id="modeBtn">Mode</button>
+      <button id="shiftBtn">2nd</button>
     </div>
     <div id="expression" class="expression">0</div>
     <div id="result" class="result">0</div>
@@ -168,15 +155,6 @@ button.zero { grid-column:span 2; }
   <ul id="historyList"></ul>
 </div>
 
-<!-- Mode overlay -->
-<div id="modeOverlay" class="mode-overlay">
-  <h3>Select Template</h3>
-  <button onclick="insertTemplate('a+bx+c')">a + bx + c</button>
-  <button onclick="insertTemplate('ax^2+bx+c')">ax² + bx + c</button>
-  <button onclick="insertTemplate('y=mx+c')">y = mx + c</button>
-  <button onclick="closeMode()">Close</button>
-</div>
-
 <script>
 let expr=document.getElementById('expression');
 let res=document.getElementById('result');
@@ -185,23 +163,17 @@ let historyList=document.getElementById('historyList');
 let historyBtn=document.getElementById('historyBtn');
 let closeHistory=document.getElementById('closeHistory');
 let shiftBtn=document.getElementById('shiftBtn');
-let modeBtn=document.getElementById('modeBtn');
-let modeOverlay=document.getElementById('modeOverlay');
 
 let shift=false;
 let degMode=true;
 let ans=0;
 let historyArr=[];
 
-// Display and History
+// History overlay
 historyBtn.addEventListener('click',()=>historyOverlay.style.display='flex');
 closeHistory.addEventListener('click',()=>historyOverlay.style.display='none');
 
-modeBtn.addEventListener('click',()=>modeOverlay.style.display='block');
-function closeMode(){modeOverlay.style.display='none';}
-function insertTemplate(tmpl){expr.innerText=tmpl;closeMode();}
-
-// Shift toggle
+// 2nd button
 shiftBtn.addEventListener('click',()=>{shift=true;});
 
 // Append numbers/operators
@@ -232,7 +204,6 @@ function appendFunction(f){
   }
 }
 
-function factorial(n){n=parseInt(n); if(n<0) return NaN; if(n===0||n===1) return 1; let res=1; for(let i=2;i<=n;i++) res*=i; return res;}
 function calculate(){
   let e=expr.innerText;
   try{
@@ -256,4 +227,4 @@ res.addEventListener('click',()=>{append(ans);});
 </script>
 
 </body>
-  </html>
+</html>
