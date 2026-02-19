@@ -3,339 +3,252 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT Awards Voting</title>
+<title>Calculator Max - Scientific</title>
 <style>
-body {
+  body {
     margin:0;
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    color:#fff;
-    text-align:center;
-}
-h1 {
-    font-size: 32px;
-    margin-top:15px;
-    text-shadow: 1px 1px #000;
-}
-.card {
-    background: rgba(0,0,0,0.7);
-    width: 95%;
-    max-width: 400px;
-    margin: 15px auto;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .calculator {
+    background: #1e293b;
+    border-radius: 20px;
+    padding: 20px;
+    width: 360px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+
+  .display {
+    background: #111827;
+    border-radius: 12px;
     padding: 15px;
-    border-radius:15px;
-    box-shadow:0 0 15px rgba(0,0,0,0.5);
-}
-.nominee-row {
-    display:flex;
-    justify-content:center;
-    gap:15px;
-    margin:10px 0;
-}
-.nominee-img {
-    width:120px;
-    height:120px;
-    object-fit:cover;
-    border-radius:50%;
-    border: 3px solid #fff;
-}
-button.voteBtn {
-    padding:10px 20px;
-    margin:5px;
-    font-size:16px;
-    font-weight:bold;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-    background:#e63946;
-    color:#fff;
-}
-button.voteBtn:disabled {
-    background:#555;
-    cursor:not-allowed;
-}
-.votes {
-    font-size:22px;
-    font-weight:bold;
-    color:#ffcc00;
-    margin-top:5px;
-}
-.comment-section {
-    background: rgba(255,255,255,0.1);
-    padding:10px;
-    margin-top:10px;
-    border-radius:10px;
-    text-align:left;
-    max-height:200px;
-    overflow-y:auto;
-    display:none;
-}
-.comment {
-    background: rgba(0,0,0,0.3);
-    margin:5px 0;
-    padding:5px 10px;
-    border-radius:5px;
-}
-#countdown {
-    font-size:18px;
-    font-weight:bold;
-    margin-top:10px;
-    color:#ff4444;
-}
-.share-section {
-    margin-top:10px;
-}
-.share-section button {
-    padding:8px 15px;
-    margin:5px;
-    font-size:14px;
-    border-radius:5px;
-    border:none;
-    background:#00b894;
-    color:white;
-    cursor:pointer;
-}
-.tiktok-follow {
-    margin-top:10px;
-    font-size:16px;
-}
-.tiktok-follow img {
-    width:30px;
-    vertical-align:middle;
-}
-.tiktok-follow a {
-    color:#ffe400;
-    text-decoration:none;
-    font-weight:bold;
-    margin-left:5px;
-}
-.redirect-note {
-    color:red;
-    font-weight:bold;
-    margin:5px 0;
-}
-.comment-toggle {
-    padding:8px 15px;
-    margin:5px;
-    font-size:14px;
-    border-radius:5px;
-    border:none;
-    background:#ff6b6b;
-    color:white;
-    cursor:pointer;
-}
+    margin-bottom: 15px;
+    min-height: 90px;
+    color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .expression {
+    font-size: 18px;
+    color: #94a3b8;
+    word-wrap: break-word;
+  }
+
+  .result {
+    font-size: 28px;
+    margin-top: 5px;
+    word-wrap: break-word;
+  }
+
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+
+  button {
+    padding: 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    background: #334155;
+    color: white;
+    transition: 0.2s;
+  }
+
+  button:hover {
+    background: #475569;
+  }
+
+  button.operator {
+    background: #f97316;
+  }
+
+  button.equal {
+    background: #22c55e;
+    grid-column: span 2;
+  }
+
+  button.zero {
+    grid-column: span 2;
+  }
+
+  .history {
+    background: #111827;
+    padding: 10px;
+    border-radius: 10px;
+    max-height: 120px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    color: #cbd5e1;
+    font-size: 14px;
+  }
 </style>
 </head>
 <body>
 
-<h1>GOAT Awards Voting</h1>
-<div id="countdown"></div>
+<div class="calculator">
+  <div class="display">
+    <div id="expression" class="expression">0</div>
+    <div id="result" class="result">0</div>
+  </div>
 
-<div class="card">
-    <h2>Category: GOAT</h2>
-    <div class="nominee-row">
-        <img src="https://i.ibb.co/GQW8P8qN/images-16.jpg" class="nominee-img" alt="Messi">
-        <img src="https://i.ibb.co/VWCzf1QP/images.jpg" class="nominee-img" alt="Ronaldo">
-    </div>
-    <div>
-        <button class="voteBtn" onclick="vote('A')">Vote Messi</button>
-        <button class="voteBtn" onclick="vote('B')">Vote Ronaldo</button>
-    </div>
-    <p class="votes">Messi: <span id="voteA">1823441</span></p>
-    <p class="votes">Ronaldo: <span id="voteB">1895755</span></p>
-    <div id="redirectVoteNote" class="redirect-note" style="display:none;">Don't mind the redirect. Click again to vote!</div>
+  <div class="history" id="historyList"></div>
+
+  <div class="buttons">
+    <button onclick="toggleDegRad()">DEG</button>
+    <button onclick="memoryClear()">MC</button>
+    <button onclick="memoryRecall()">MR</button>
+    <button onclick="memoryAdd()">M+</button>
+    <button onclick="memorySubtract()">M-</button>
+
+    <button onclick="appendFunction('sin')">sin</button>
+    <button onclick="appendFunction('cos')">cos</button>
+    <button onclick="appendFunction('tan')">tan</button>
+    <button onclick="appendFunction('log')">log</button>
+    <button onclick="appendFunction('ln')">ln</button>
+
+    <button onclick="appendFunction('√')">√</button>
+    <button onclick="appendFunction('x²')">x²</button>
+    <button onclick="appendFunction('x³')">x³</button>
+    <button onclick="appendFunction('π')">π</button>
+    <button onclick="appendFunction('e')">e</button>
+
+    <button onclick="clearAll()" class="operator">C</button>
+    <button onclick="backspace()" class="operator">⌫</button>
+    <button onclick="append('%')" class="operator">%</button>
+    <button onclick="append('/')" class="operator">÷</button>
+    <button onclick="append('!')" class="operator">!</button>
+
+    <button onclick="append('7')">7</button>
+    <button onclick="append('8')">8</button>
+    <button onclick="append('9')">9</button>
+    <button onclick="append('*')" class="operator">×</button>
+    <button onclick="append('(')">(</button>
+
+    <button onclick="append('4')">4</button>
+    <button onclick="append('5')">5</button>
+    <button onclick="append('6')">6</button>
+    <button onclick="append('-')" class="operator">−</button>
+    <button onclick="append(')')">)</button>
+
+    <button onclick="append('1')">1</button>
+    <button onclick="append('2')">2</button>
+    <button onclick="append('3')">3</button>
+    <button onclick="append('+')" class="operator">+</button>
+
+    <button onclick="append('0')" class="zero">0</button>
+    <button onclick="append('.')">.</button>
+    <button onclick="calculate()" class="equal">=</button>
+  </div>
 </div>
 
-<div class="card">
-    <button class="comment-toggle" onclick="toggleComments()">Show Comments</button>
-    <div class="comment-section" id="comments">
-        <input type="text" id="commentInput" placeholder="Write your comment..." style="width:70%;padding:5px;">
-        <button onclick="addComment()">Post</button>
-    </div>
-    <div id="redirectCommentNote" class="redirect-note" style="display:none;">Don't mind the redirect. Click again to view comments!</div>
-</div>
+<script>
+let expressionDiv = document.getElementById('expression');
+let resultDiv = document.getElementById('result');
+let historyList = document.getElementById('historyList');
+let historyArray = [];
+let memory = 0;
+let degMode = true;
 
-<div class="share-section">
-    <button onclick="shareOptions()">Share</button>
-</div>
-
-<div class="tiktok-follow">
-    <img src="https://i.ibb.co/4ZvMhKcy/images-1.png" alt="TikTok"> 
-    <a href="https://www.tiktok.com/@prof.lord.peps?_r=1&_t=ZS-91yYLzVtT32" target="_blank">@prof.lord.peps</a>
-</div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
-
-// Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyAT9v-MfKjPpBHT58Iwt8JznDvwRjPIhqs",
-  authDomain: "goat-awards.firebaseapp.com",
-  databaseURL: "https://goat-awards-default-rtdb.firebaseio.com/",
-  projectId: "goat-awards",
-  storageBucket: "goat-awards.appspot.com",
-  messagingSenderId: "210046042590",
-  appId: "1:210046042590:web:b9473b14f8834fe0521d4f"
-};
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-// Votes
-let userVote = null;
-const voteCooldown = 30*60*1000; // 30 min
-const lastVoteKey = 'lastVoteTime';
-const startingVotes = {A:1823441,B:1895755};
-const voteAEl = document.getElementById("voteA");
-const voteBEl = document.getElementById("voteB");
-
-// Load votes
-function loadVotes(){
-    const votesRef = ref(db,'votes');
-    onValue(votesRef,snapshot=>{
-        const data = snapshot.val() || startingVotes;
-        voteAEl.innerText = data.A;
-        voteBEl.innerText = data.B;
-    });
+function append(value){
+    if(expressionDiv.innerText === "0") expressionDiv.innerText = value;
+    else expressionDiv.innerText += value;
 }
 
-// Vote function
-function vote(person){
-    const now = Date.now();
-    const lastVoteTime = localStorage.getItem(lastVoteKey);
-    if(lastVoteTime && now - lastVoteTime < voteCooldown){
-        alert("You can vote again after 30 minutes");
-        return;
+function appendFunction(func){
+    switch(func){
+        case 'sin': expressionDiv.innerText += 'sin('; break;
+        case 'cos': expressionDiv.innerText += 'cos('; break;
+        case 'tan': expressionDiv.innerText += 'tan('; break;
+        case 'log': expressionDiv.innerText += 'log('; break;
+        case 'ln': expressionDiv.innerText += 'ln('; break;
+        case '√': expressionDiv.innerText += '√('; break;
+        case 'x²': expressionDiv.innerText += '**2'; break;
+        case 'x³': expressionDiv.innerText += '**3'; break;
+        case 'π': expressionDiv.innerText += 'Math.PI'; break;
+        case 'e': expressionDiv.innerText += 'Math.E'; break;
+        case '!': expressionDiv.innerText += 'factorial('; break;
     }
-    // Show redirect first
-    window.open('https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9','_blank');
-    document.getElementById('redirectVoteNote').style.display='block';
-    setTimeout(()=>{
-        const votesRef = ref(db,'votes');
-        onValue(votesRef,snapshot=>{
-            let votes = snapshot.val() || startingVotes;
-            if(person==='A') votes.A++;
-            if(person==='B') votes.B++;
-            set(votesRef,votes);
-            localStorage.setItem(lastVoteKey,Date.now());
-            document.getElementById('redirectVoteNote').style.display='none';
-        }, {onlyOnce:true});
-    }, 1000);
 }
 
-// Countdown
-function countdown(){
-    const endDate = new Date("Dec 23, 2025 23:59:59").getTime();
-    setInterval(()=>{
-        const now = new Date().getTime();
-        const distance = endDate - now;
-        if(distance<0){
-            document.getElementById('countdown').innerText="Voting ended!";
-            return;
+function clearAll(){
+    expressionDiv.innerText = '0';
+    resultDiv.innerText = '0';
+}
+
+function backspace(){
+    let exp = expressionDiv.innerText;
+    expressionDiv.innerText = exp.slice(0,-1);
+    if(expressionDiv.innerText === '') expressionDiv.innerText = '0';
+}
+
+function toggleDegRad(){
+    degMode = !degMode;
+    alert(degMode ? "Degree Mode" : "Radian Mode");
+}
+
+// Memory functions
+function memoryClear(){ memory = 0; }
+function memoryRecall(){ append(memory); }
+function memoryAdd(){ memory += parseFloat(resultDiv.innerText) || 0; }
+function memorySubtract(){ memory -= parseFloat(resultDiv.innerText) || 0; }
+
+// Factorial
+function factorial(n){
+    n = parseInt(n);
+    if(n < 0) return NaN;
+    if(n ===0 || n===1) return 1;
+    let res=1;
+    for(let i=2;i<=n;i++) res*=i;
+    return res;
+}
+
+function calculate(){
+    let exp = expressionDiv.innerText;
+    try{
+        exp = exp.replace(/sin\(/g,'Math.sin(')
+                 .replace(/cos\(/g,'Math.cos(')
+                 .replace(/tan\(/g,'Math.tan(')
+                 .replace(/log\(/g,'Math.log10(')
+                 .replace(/ln\(/g,'Math.log(')
+                 .replace(/√\(/g,'Math.sqrt(')
+                 .replace(/factorial\(([^)]+)\)/g,(match,p1)=>`factorial(${p1})`);
+        if(degMode){
+            exp = exp.replace(/Math\.sin\(([^)]+)\)/g,(m,p1)=>`Math.sin(${p1}*Math.PI/180)`);
+            exp = exp.replace(/Math\.cos\(([^)]+)\)/g,(m,p1)=>`Math.cos(${p1}*Math.PI/180)`);
+            exp = exp.replace(/Math\.tan\(([^)]+)\)/g,(m,p1)=>`Math.tan(${p1}*Math.PI/180)`);
         }
-        const days = Math.floor(distance/(1000*60*60*24));
-        const hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-        const minutes = Math.floor((distance%(1000*60*60))/(1000*60));
-        const seconds = Math.floor((distance%(1000*60))/1000);
-        document.getElementById('countdown').innerText=`Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-    },1000);
+        let result = eval(exp);
+        resultDiv.innerText = result;
+        addToHistory(expressionDiv.innerText+" = "+result);
+    }catch(err){
+        resultDiv.innerText = "Error";
+    }
 }
 
-// Comments
-let comments = [];
-const fakeComments = [
-    {user:'Fan101',text:'Ronaldo is the real GOAT! 🔥⚽'},
-    {user:'MessiLover',text:'Messi all day 💪😎'},
-    {user:'SoccerKing',text:'CR7 has no World Cup lol 😂'},
-    {user:'GoalMachine',text:'Messi is short but deadly 😏'},
-    {user:'FootballFan',text:'Ronaldo, come on, show the skills 👏'},
-    {user:'SoccerAddict',text:'Messi dribbles like magic ✨'},
-    {user:'GoalCrazy',text:'CR7 fans be quiet 😝'},
-    {user:'LegendFan',text:'Messi deserves it ⚡️'},
-    {user:'TopScorer',text:'Ronaldo is amazing 😍'},
-    {user:'BallKing',text:'Messi hat-trick incoming! ⚽⚽⚽'}
-];
-
-const commentsRef = ref(db,'comments');
-
-function toggleComments(){
-    const sec = document.getElementById('comments');
-    if(sec.style.display==='block') return;
-    // Redirect first
-    window.open('https://obvioussecretive.com/rwj2iaik6g?key=d39bd78c2ae2358792721a701a778ba9','_blank');
-    document.getElementById('redirectCommentNote').style.display='block';
-    setTimeout(()=>{
-        sec.style.display='block';
-        document.getElementById('redirectCommentNote').style.display='none';
-        loadComments();
-    },1000);
+function addToHistory(text){
+    historyArray.unshift(text);
+    if(historyArray.length>10) historyArray.pop();
+    renderHistory();
 }
 
-function loadComments(){
-    onValue(commentsRef, snapshot=>{
-        comments = snapshot.val() || fakeComments;
-        // Fill fake if empty
-        if(comments.length<20){
-            set(commentsRef,fakeComments);
-            comments=fakeComments;
-        }
-        renderComments();
+function renderHistory(){
+    historyList.innerHTML='';
+    historyArray.forEach(item=>{
+        let li=document.createElement('li');
+        li.innerText=item;
+        historyList.appendChild(li);
     });
 }
-
-function renderComments(){
-    const cDiv = document.getElementById('comments');
-    const input=document.getElementById('commentInput');
-    cDiv.innerHTML='';
-    input && cDiv.appendChild(input);
-    comments.slice().reverse().forEach(c=>{
-        const div=document.createElement('div');
-        div.className='comment';
-        div.innerHTML=`<b>${c.user}</b>: ${c.text} <br><i>${c.time || ''}</i>`;
-        cDiv.appendChild(div);
-    });
-}
-
-function addComment(){
-    const input = document.getElementById('commentInput');
-    if(input.value.trim()==='') return;
-    const userId = 'User'+(parseInt(voteAEl.innerText)+parseInt(voteBEl.innerText)+comments.length+1);
-    const newComment = {user:userId, text:input.value, time:new Date().toLocaleString()};
-    comments.push(newComment);
-    set(commentsRef,comments).then(()=>input.value='');
-}
-
-// Simulate live comments
-function simulateLiveComments(){
-    setInterval(()=>{
-        const randomComment = fakeComments[Math.floor(Math.random()*fakeComments.length)];
-        const newComment = {...randomComment, time:new Date().toLocaleTimeString()};
-        comments.push(newComment);
-        set(commentsRef,comments);
-    },Math.floor(Math.random()*(15000-8000)+8000));
-}
-
-// Share Options
-function shareOptions(){
-    const text = "Vote now for the GOAT Awards! ⚽ Messi or Ronaldo? Support your GOAT!";
-    const url = encodeURIComponent(window.location.href);
-    const encodedText = encodeURIComponent(text);
-    const shareHtml = `
-        Choose platform:
-        WhatsApp: <a href="https://api.whatsapp.com/send?text=${encodedText}%20${url}" target="_blank">WhatsApp</a><br>
-        Facebook: <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank">Facebook</a><br>
-        Twitter: <a href="https://twitter.com/intent/tweet?text=${encodedText}" target="_blank">Twitter</a><br>
-        Copy Link: <button onclick="navigator.clipboard.writeText('${window.location.href}')">Copy</button>
-    `;
-    alert(shareHtml);
-}
-
-// Init
-window.onload=function(){
-    countdown();
-    loadVotes();
-    simulateLiveComments();
-};
 </script>
 
 </body>
