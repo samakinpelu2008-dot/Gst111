@@ -2,236 +2,126 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculator Pro Lite</title>
-
+<title>Simple Calculator</title>
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
 body{
-  font-family:Arial, sans-serif;
-  background:linear-gradient(135deg,#0f172a,#1e293b);
   display:flex;
   justify-content:center;
   align-items:center;
-  min-height:100dvh;
+  height:100vh;
+  background:#111;
+  font-family:Arial;
 }
-
 .calculator{
-  width:340px;
-  max-width:95vw;
-  background:#1e293b;
+  background:#222;
   padding:20px;
-  border-radius:20px;
-  box-shadow:0 15px 40px rgba(0,0,0,0.6);
+  border-radius:15px;
+  width:300px;
 }
-
-.display{
-  background:#0f172a;
-  padding:15px;
-  border-radius:12px;
-  margin-bottom:10px;
-  min-height:70px;
-  color:white;
-  font-size:22px;
-  word-break:break-word;
-}
-
-.history-btn{
-  font-size:13px;
-  margin-bottom:8px;
-  background:#334155;
-  color:white;
-  padding:6px;
-  border:none;
-  border-radius:6px;
-}
-
-.buttons{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-}
-
-button{
-  padding:15px;
-  border:none;
-  border-radius:12px;
-  font-size:18px;
-  background:#334155;
-  color:white;
-  cursor:pointer;
-}
-
-button:active{
-  transform:scale(0.95);
-}
-
-.operator{ background:#f97316; }
-.equal{ background:#22c55e; grid-column:span 2; }
-.zero{ grid-column:span 2; }
-
-/* HISTORY PANEL */
-.history-panel{
-  position:fixed;
-  bottom:-100%;
-  left:0;
+#display{
   width:100%;
-  height:60%;
-  background:#0f172a;
-  transition:0.3s;
-  padding:15px;
-  overflow-y:auto;
-}
-
-.history-panel.active{
-  bottom:0;
-}
-
-.history-panel h3{
-  color:white;
+  height:50px;
+  font-size:20px;
   margin-bottom:10px;
+  text-align:right;
+  padding:10px;
 }
-
-.history-panel li{
-  color:white;
-  margin-bottom:8px;
+button{
+  width:23%;
+  height:50px;
+  margin:1%;
+  font-size:18px;
+  border:none;
+  border-radius:8px;
   cursor:pointer;
-  border-bottom:1px solid #334155;
-  padding-bottom:5px;
+}
+.operator{background:#ff9500;color:white;}
+.equal{background:#28a745;color:white;}
+.clear{background:#dc3545;color:white;}
+.history{
+  margin-top:15px;
+  max-height:120px;
+  overflow:auto;
+  background:#111;
+  padding:10px;
+  font-size:14px;
 }
 </style>
 </head>
-
 <body>
 
 <div class="calculator">
+  <input type="text" id="display" disabled>
 
-  <div id="display" class="display">0</div>
-  <button class="history-btn" onclick="toggleHistory()">History</button>
-
-  <div class="buttons">
-    <button onclick="clearDisplay()" class="operator">C</button>
-    <button onclick="backspace()" class="operator">⌫</button>
-    <button onclick="append('(')">(</button>
-    <button onclick="append(')')">)</button>
+  <div>
+    <button onclick="clearDisplay()" class="clear">C</button>
+    <button onclick="append('^')">^</button>
+    <button onclick="append('√(')">√</button>
+    <button onclick="append('/')">÷</button>
 
     <button onclick="append('7')">7</button>
     <button onclick="append('8')">8</button>
     <button onclick="append('9')">9</button>
-    <button onclick="append('/')" class="operator">÷</button>
+    <button onclick="append('*')">×</button>
 
     <button onclick="append('4')">4</button>
     <button onclick="append('5')">5</button>
     <button onclick="append('6')">6</button>
-    <button onclick="append('*')" class="operator">×</button>
+    <button onclick="append('-')">−</button>
 
     <button onclick="append('1')">1</button>
     <button onclick="append('2')">2</button>
     <button onclick="append('3')">3</button>
-    <button onclick="append('-')" class="operator">−</button>
+    <button onclick="append('+')">+</button>
 
-    <button onclick="append('0')" class="zero">0</button>
+    <button onclick="append('0')">0</button>
     <button onclick="append('.')">.</button>
-    <button onclick="append('+')" class="operator">+</button>
-
-    <button onclick="insertSqrt()">√</button>
-    <button onclick="append('**')">xʸ</button>
     <button onclick="calculate()" class="equal">=</button>
   </div>
 
-</div>
-
-<!-- HISTORY -->
-<div id="historyPanel" class="history-panel">
-  <h3>History</h3>
-  <ul id="historyList"></ul>
-  <button onclick="clearHistory()" class="operator">Clear History</button>
+  <div class="history" id="history"></div>
 </div>
 
 <script>
-let display=document.getElementById("display");
-let historyPanel=document.getElementById("historyPanel");
-let historyList=document.getElementById("historyList");
+let display = document.getElementById("display");
+let historyBox = document.getElementById("history");
 
-let historyArray=JSON.parse(localStorage.getItem("calcHistory"))||[];
+// Load saved history
+window.onload = function(){
+  historyBox.innerHTML = localStorage.getItem("calcHistory") || "";
+}
 
-/* APPEND */
 function append(value){
-  if(display.innerText==="0")
-    display.innerText=value;
-  else
-    display.innerText+=value;
+  display.value += value;
 }
 
-/* SQRT AUTO BRACKET */
-function insertSqrt(){
-  if(display.innerText==="0")
-    display.innerText="Math.sqrt(";
-  else
-    display.innerText+="Math.sqrt(";
-}
-
-/* CLEAR */
 function clearDisplay(){
-  display.innerText="0";
+  display.value = "";
 }
 
-/* BACKSPACE */
-function backspace(){
-  let text=display.innerText;
-  display.innerText=text.slice(0,-1) || "0";
-}
-
-/* CALCULATE */
 function calculate(){
   try{
-    let result=eval(display.innerText);
-    display.innerText=result;
-    addHistory(display.innerText);
-  }catch{
-    display.innerText="Error";
+    let expression = display.value;
+
+    // Convert symbols to JS format
+    expression = expression.replace(/√\(/g, "Math.sqrt(");
+    expression = expression.replace(/\^/g, "**");
+
+    let result = eval(expression);
+
+    let historyEntry = display.value + " = " + result + "<br>";
+    historyBox.innerHTML += historyEntry;
+
+    // Save to localStorage
+    localStorage.setItem("calcHistory", historyBox.innerHTML);
+
+    display.value = result;
+  }
+  catch{
+    display.value = "Error";
   }
 }
-
-/* HISTORY FUNCTIONS */
-function addHistory(result){
-  historyArray.unshift(result);
-  if(historyArray.length>50) historyArray.pop();
-  localStorage.setItem("calcHistory",JSON.stringify(historyArray));
-  renderHistory();
-}
-
-function renderHistory(){
-  historyList.innerHTML="";
-  historyArray.forEach(item=>{
-    let li=document.createElement("li");
-    li.innerText=item;
-    li.onclick=function(){
-      display.innerText=item;
-      toggleHistory();
-    };
-    historyList.appendChild(li);
-  });
-}
-
-function clearHistory(){
-  historyArray=[];
-  localStorage.removeItem("calcHistory");
-  renderHistory();
-}
-
-function toggleHistory(){
-  historyPanel.classList.toggle("active");
-}
-
-/* LOAD HISTORY ON START */
-renderHistory();
 </script>
 
 </body>
-                                     </html>
+</html>
