@@ -6,109 +6,25 @@
 <title>Calculator Pro Lite</title>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-body{
-  font-family:Arial, sans-serif;
-  background:linear-gradient(135deg,#0f172a,#1e293b);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100dvh;
-}
-
-.calculator{
-  width:340px;
-  max-width:95vw;
-  background:#1e293b;
-  padding:20px;
-  border-radius:20px;
-  box-shadow:0 15px 40px rgba(0,0,0,0.6);
-}
-
-.display{
-  background:#0f172a;
-  padding:15px;
-  border-radius:12px;
-  margin-bottom:10px;
-  min-height:70px;
-  color:white;
-  font-size:22px;
-  word-break:break-word;
-}
-
-.history-btn{
-  font-size:13px;
-  margin-bottom:8px;
-  background:#334155;
-  color:white;
-  padding:6px;
-  border:none;
-  border-radius:6px;
-}
-
-.buttons{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-}
-
-button{
-  padding:15px;
-  border:none;
-  border-radius:12px;
-  font-size:18px;
-  background:#334155;
-  color:white;
-  cursor:pointer;
-}
-
-button:active{
-  transform:scale(0.95);
-}
-
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Arial, sans-serif;background:linear-gradient(135deg,#0f172a,#1e293b);display:flex;justify-content:center;align-items:center;min-height:100dvh;}
+.calculator{width:340px;max-width:95vw;background:#1e293b;padding:20px;border-radius:20px;box-shadow:0 15px 40px rgba(0,0,0,0.6);}
+.display{background:#0f172a;padding:15px;border-radius:12px;margin-bottom:10px;min-height:70px;color:white;font-size:22px;word-break:break-word;}
+.history-btn{font-size:13px;margin-bottom:8px;background:#334155;color:white;padding:6px;border:none;border-radius:6px;}
+.buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+button{padding:15px;border:none;border-radius:12px;font-size:18px;background:#334155;color:white;cursor:pointer;}
+button:active{transform:scale(0.95);}
 .operator{ background:#f97316; }
 .equal{ background:#22c55e; grid-column:span 2; }
 .zero{ grid-column:span 2; }
-
-/* HISTORY PANEL */
-.history-panel{
-  position:fixed;
-  bottom:-100%;
-  left:0;
-  width:100%;
-  height:60%;
-  background:#0f172a;
-  transition:0.3s;
-  padding:15px;
-  overflow-y:auto;
-}
-
-.history-panel.active{
-  bottom:0;
-}
-
-.history-panel h3{
-  color:white;
-  margin-bottom:10px;
-}
-
-.history-panel li{
-  color:white;
-  margin-bottom:8px;
-  cursor:pointer;
-  border-bottom:1px solid #334155;
-  padding-bottom:5px;
-}
+.history-panel{position:fixed;bottom:-100%;left:0;width:100%;height:60%;background:#0f172a;transition:0.3s;padding:15px;overflow-y:auto;}
+.history-panel.active{bottom:0;}
+.history-panel h3{color:white;margin-bottom:10px;}
+.history-panel li{color:white;margin-bottom:8px;cursor:pointer;border-bottom:1px solid #334155;padding-bottom:5px;}
 </style>
 </head>
 
 <body>
-
 <div class="calculator">
 
   <div id="display" class="display">0</div>
@@ -143,7 +59,6 @@ button:active{
     <button onclick="append('^')">xʸ</button>
     <button onclick="calculate()" class="equal">=</button>
   </div>
-
 </div>
 
 <!-- HISTORY -->
@@ -157,7 +72,6 @@ button:active{
 let display=document.getElementById("display");
 let historyPanel=document.getElementById("historyPanel");
 let historyList=document.getElementById("historyList");
-
 let historyArray=JSON.parse(localStorage.getItem("calcHistory"))||[];
 
 /* APPEND */
@@ -168,44 +82,43 @@ function append(value){
     display.innerText+=value;
 }
 
-/* SQRT */
+/* SQRT automatic */
 function insertSqrt(){
   if(display.innerText==="0")
-    display.innerText="√(";
+    display.innerText="√";
   else
-    display.innerText+="√(";
+    display.innerText+="√";
 }
 
 /* CLEAR */
-function clearDisplay(){
-  display.innerText="0";
-}
+function clearDisplay(){ display.innerText="0"; }
 
 /* BACKSPACE */
-function backspace(){
-  let text=display.innerText;
-  display.innerText=text.slice(0,-1) || "0";
-}
+function backspace(){ display.innerText=display.innerText.slice(0,-1) || "0"; }
 
-/* CALCULATE */
+/* CALCULATE - stress-free */
 function calculate(){
   try{
-    let expression = display.innerText;
+    let exp = display.innerText;
 
-    expression = expression.replace(/÷/g,"/");
-    expression = expression.replace(/×/g,"*");
-    expression = expression.replace(/−/g,"-");
-    expression = expression.replace(/\^/g,"**");
-    expression = expression.replace(/√\(/g,"Math.sqrt(");
+    // Replace symbols with JS operators
+    exp = exp.split("÷").join("/");
+    exp = exp.split("×").join("*");
+    exp = exp.split("−").join("-");
+    exp = exp.split("^").join("**");
 
-    let result = eval(expression);
+    // Convert √numbers automatically, e.g. √25 => Math.sqrt(25)
+    exp = exp.replace(/√([0-9.]+)/g,"Math.sqrt($1)");
+
+    // Evaluate using Function (safer than eval)
+    let result = Function('"use strict"; return ('+exp+')')();
 
     addHistory(display.innerText + " = " + result);
 
     display.innerText = result;
 
-  }catch{
-    display.innerText="Error";
+  } catch {
+    display.innerText = "Error";
   }
 }
 
@@ -236,12 +149,10 @@ function clearHistory(){
   renderHistory();
 }
 
-function toggleHistory(){
-  historyPanel.classList.toggle("active");
-}
+function toggleHistory(){ historyPanel.classList.toggle("active"); }
 
+/* LOAD HISTORY */
 renderHistory();
 </script>
-
 </body>
-        </html>
+</html>
